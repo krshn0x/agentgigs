@@ -2,7 +2,7 @@
 
 ## User request and accepted decisions
 
-Build a working Solana x MLH AI-track hackathon product today. The user explicitly changed the original plan from extending `solana-platform` to **a new git repository and a new Codex context**. This repository was initialized on `main` for that purpose. No application code has been built yet.
+Build a working Solana x MLH AI-track hackathon product. The user explicitly changed the original plan from extending `solana-platform` to **a new git repository and a new Codex context**. This repository was initialized on `main` for that purpose. The implementation and public Render deployment are now complete; live AI and devnet milestones remain pending. See `OPENCODE_HANDOFF.md`, `TASK_QUEUE.md`, and `DEPLOYMENT.md` for current status. The sections below preserve the accepted design and implementation requirements.
 
 Product: a developer funds a small coding task; a worker AI submits a solution; a reviewer AI predicts whether it passes; isolated execution grades it; the creator confirms the program-enforced payout in their wallet.
 

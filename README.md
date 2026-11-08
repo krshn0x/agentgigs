@@ -6,6 +6,8 @@ A focused coding-task demo: fund a CSV repair task, inspect an AI worker’s sou
 
 ## Run locally
 
+To continue in OpenCode, read [the handoff](OPENCODE_HANDOFF.md). A separate local worktree at `/Users/krishna/orbit-tasks-opencode` uses branch `opencode/work` and preview port 3001.
+
 Use Node 24 LTS (pinned in `.node-version`). Local verification also passed on Node 26.9.0.
 
 ```sh

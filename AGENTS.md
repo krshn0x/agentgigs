@@ -1,6 +1,8 @@
 # Orbit Tasks
 
-This is a fresh repository for the user's Solana x MLH AI-track hackathon project. The user explicitly requested a new repository and a fresh Codex context, and has now authorized implementation in Default mode. Work in `/Users/krishna/orbit-tasks`.
+This repository is the user's Solana x MLH AI-track hackathon project. Implementation and public hosting are complete; live AI/devnet setup remains pending. The primary checkout is `/Users/krishna/orbit-tasks`; the user also authorized OpenCode development in the separate `/Users/krishna/orbit-tasks-opencode` worktree on `opencode/work`. Work in the checkout assigned to the current session.
+
+For a resumed or OpenCode session, read `OPENCODE_HANDOFF.md`, `TASK_QUEUE.md`, and `DEPLOYMENT.md` first. The public app is https://orbit-tasks-wcsa.onrender.com. Continue existing work rather than restarting implementation.
 
 Read `PROJECT_PLAN.md` before implementing. It contains the decisions already agreed with the user. Do not restart product discovery or ask for these decisions again.
 
