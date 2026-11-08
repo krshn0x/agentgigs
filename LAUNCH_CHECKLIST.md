@@ -24,7 +24,7 @@ An ignored `.env` has been created from `.env.example`. Fill it privately; never
 | `PROGRAM_ID` | Address of the deployed escrow build, verified on devnet |
 | `APP_ORIGIN` | `http://localhost:3000` locally; exact Render HTTPS origin when hosted |
 
-Keep the model IDs at `qwen/qwen3-coder:free`. Both recipient wallets must be ordinary, empty-data system accounts with the current rent-exempt balance. The creator needs devnet SOL for the reward, fees, rent, and program deployment. Wallets retain their own signing keys.
+Keep the model IDs at `cohere/north-mini-code:free`, the verified free coding model (validated live on 2026-11-08). Both recipient wallets must be ordinary, empty-data system accounts with the current rent-exempt balance. The creator needs devnet SOL for the reward, fees, rent, and program deployment. Wallets retain their own signing keys.
 
 After supplying the database URL, run `npm run db:migrate`. Then run `npm run build` and `npm run preflight`.
 

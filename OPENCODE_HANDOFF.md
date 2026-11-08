@@ -72,7 +72,7 @@ The local browser suite defaults to port 3000 and can reuse the original preview
 ## Next queued tasks
 
 1. Obtain three distinct **public** Solana addresses: operator/creator, worker recipient, reviewer recipient. They have been requested but not supplied.
-2. Have the user enter `OPENROUTER_API_KEY` privately in Render's environment settings. Both model IDs remain pinned to `qwen/qwen3-coder:free`, with no paid fallback. Do not request the key in chat or print environment values.
+2. Done on 2026-11-08 via the Render API with the owner-supplied key: `OPENROUTER_API_KEY` set privately in Render's environment, and both model IDs pinned to `cohere/north-mini-code:free` (`qwen/qwen3-coder:free` exited the free catalog) with no paid fallback.
 3. Verify the intended compiled program and creator address, obtain devnet test SOL, prepare a concrete deployment review with estimated fees, then request the required signing approval. The source program address `E8xdjtgfA7qBWDs7imTntLPoyQ51ZZhf9zUbuQSHDg7i` is a build address, not deployment evidence.
 4. Set the actual deployed `PROGRAM_ID` and public wallet settings. Both payout wallets must be ordinary system accounts with the current rent-exempt balance. Confirm readiness.
 5. Run one genuine task: fund → worker/reviewer → commit → evaluate → settle. Simulate and show the exact recipients, amounts, fee payer, cluster, fees, and rent before each user-approved signature. Reconcile uncertain signatures before building another transaction.
