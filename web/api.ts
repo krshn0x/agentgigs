@@ -1,0 +1,4 @@
+export async function api(path:string,body?:unknown,key?:string){const response=await fetch('/api'+path,{method:body===undefined?'GET':'POST',headers:body===undefined?{}:{'Content-Type':'application/json','Idempotency-Key':key??crypto.randomUUID()},credentials:'same-origin',body:body===undefined?undefined:JSON.stringify(body)});const result=await response.json();if(!response.ok)throw new Error(result.error??'REQUEST_FAILED');return result;}
+export const sol=(value:string|number)=>`${(Number(value)/1e9).toLocaleString('en',{maximumFractionDigits:9})} SOL`;
+export const short=(address:string='')=>address?`${address.slice(0,5)}…${address.slice(-5)}`:'Not configured';
+export const explorer=(value:string,type='tx')=>`https://explorer.solana.com/${type}/${value}?cluster=devnet`;

@@ -1,0 +1,13 @@
+[toolchain]
+anchor_version = "1.1.2"
+solana_version = "3.1.10"
+[features]
+resolution = true
+skip-lint = false
+[programs.localnet]
+task_escrow = "E8xdjtgfA7qBWDs7imTntLPoyQ51ZZhf9zUbuQSHDg7i"
+[programs.devnet]
+task_escrow = "E8xdjtgfA7qBWDs7imTntLPoyQ51ZZhf9zUbuQSHDg7i"
+[provider]
+cluster = "Devnet"
+wallet = "~/.config/solana/id.json"

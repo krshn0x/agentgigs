@@ -1,0 +1,148 @@
+{
+  "id": "fixture",
+  "kind": "fixture",
+  "title": "Repair a CSV parser",
+  "stage": "evaluated",
+  "specification": "Implement function solve(input: string): string[][] for valid CSV. Support quoted commas, doubled quote escapes, CRLF and LF row separators, empty cells, and newlines inside quoted cells. A final row separator does not create an extra row. Empty input returns [[\"\"]]. No imports or exports. Return arrays of strings only. Do not mutate global JSON or host APIs.",
+  "examples": [
+    {
+      "input": "a,b\nc,d",
+      "output": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "c",
+          "d"
+        ]
+      ]
+    },
+    {
+      "input": "\"a,b\",\"c\"\"d\"\r\n,",
+      "output": [
+        [
+          "a,b",
+          "c\"d"
+        ],
+        [
+          "",
+          ""
+        ]
+      ]
+    }
+  ],
+  "policyVersion": 1,
+  "budget": "10000000",
+  "deadline": 1794124800,
+  "createdAt": "2026-11-08T00:00:00.000Z",
+  "source": "function solve(input) {\n  const rows = [], row = [];\n  let cell = '', quoted = false;\n  for (let i = 0; i < input.length; i++) {\n    const c = input[i];\n    if (c === '\"') {\n      if (quoted && input[i + 1] === '\"') { cell += '\"'; i++; }\n      else quoted = !quoted;\n    } else if (!quoted && c === ',') { row.push(cell); cell = ''; }\n    else if (!quoted && (c === '\\n' || c === '\\r')) {\n      if (c === '\\r' && input[i + 1] === '\\n') i++;\n      row.push(cell); rows.push(row.splice(0)); cell = '';\n      if (i === input.length - 1) return rows;\n    } else cell += c;\n  }\n  row.push(cell); rows.push(row); return rows;\n}\n",
+  "solutionHash": "2038cadb5d970b1d5e10ba06c6e4a8bfe887dbcd479e8c735e1fcc50c02b321e",
+  "suiteHash": "f00551b9107e56b066104406d731a634918932f8bff642cfc109ca3c5e3369fc",
+  "specificationHash": "365600bfda1650df7c8f3244a1b10745101dad186d504b5173a62b4f4305bba6",
+  "workerMetadata": {
+    "returnedModel": "Handwritten fixture · no AI call"
+  },
+  "review": {
+    "probabilityBps": 8500,
+    "explanation": "Handwritten fixture review: this state machine handles quoted delimiters and doubled quote escapes. This is not a live model prediction.",
+    "metadata": {
+      "returnedModel": "Handwritten fixture"
+    }
+  },
+  "report": {
+    "version": 1,
+    "solutionHash": "2038cadb5d970b1d5e10ba06c6e4a8bfe887dbcd479e8c735e1fcc50c02b321e",
+    "suiteHash": "f00551b9107e56b066104406d731a634918932f8bff642cfc109ca3c5e3369fc",
+    "allPass": true,
+    "tests": [
+      {
+        "index": 1,
+        "pass": true
+      },
+      {
+        "index": 2,
+        "pass": true
+      },
+      {
+        "index": 3,
+        "pass": true
+      },
+      {
+        "index": 4,
+        "pass": true
+      },
+      {
+        "index": 5,
+        "pass": true
+      },
+      {
+        "index": 6,
+        "pass": true
+      },
+      {
+        "index": 7,
+        "pass": true
+      },
+      {
+        "index": 8,
+        "pass": true
+      },
+      {
+        "index": 9,
+        "pass": true
+      },
+      {
+        "index": 10,
+        "pass": true
+      },
+      {
+        "index": 11,
+        "pass": true
+      },
+      {
+        "index": 12,
+        "pass": true
+      },
+      {
+        "index": 13,
+        "pass": true
+      },
+      {
+        "index": 14,
+        "pass": true
+      },
+      {
+        "index": 15,
+        "pass": true
+      },
+      {
+        "index": 16,
+        "pass": true
+      },
+      {
+        "index": 17,
+        "pass": true
+      },
+      {
+        "index": 18,
+        "pass": true
+      },
+      {
+        "index": 19,
+        "pass": true
+      },
+      {
+        "index": 20,
+        "pass": true
+      }
+    ],
+    "reportHash": "693e020dd3093e46b77557513943bb76906d769d34b1dcac5b2aff783d8a0d11"
+  },
+  "payout": {
+    "worker": "8000000",
+    "reviewer": "1955000",
+    "refund": "45000"
+  },
+  "signatures": {}
+}

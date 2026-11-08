@@ -1,0 +1,2 @@
+import {Store} from '../src/store.mjs';import {readConfig} from '../src/config.mjs';import {publicTask} from '../src/domain.mjs';
+const store=new Store(readConfig().databaseUrl);try{const tasks=await store.transaction(async c=>(await c.query('SELECT data FROM tasks ORDER BY created_at')).rows.map(r=>publicTask(r.data)));process.stdout.write(JSON.stringify({exportedAt:new Date().toISOString(),tasks},null,2)+'\n');}finally{await store.close();}

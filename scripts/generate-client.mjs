@@ -1,0 +1,12 @@
+import {readFile,mkdir,writeFile} from 'node:fs/promises';
+import {createFromRoot} from 'codama';
+import {rootNodeFromAnchor} from '@codama/nodes-from-anchor';
+import {renderVisitor} from '@codama/renderers-js';
+const idl=JSON.parse(await readFile(new URL('../target/idl/task_escrow.json',import.meta.url),'utf8'));
+await mkdir(new URL('../idl/',import.meta.url),{recursive:true});
+await writeFile(new URL('../idl/task_escrow.json',import.meta.url),JSON.stringify(idl,null,2)+'\n');
+const codama=createFromRoot(rootNodeFromAnchor(idl));
+codama.accept(renderVisitor(new URL('../clients/task-escrow',import.meta.url).pathname,{formatCode:true,importExtension:'ts',erasableSyntax:true}));
+const packagePath=new URL('../clients/task-escrow/package.json',import.meta.url);
+const pkg=JSON.parse(await readFile(packagePath,'utf8'));pkg.type='module';await writeFile(packagePath,JSON.stringify(pkg,null,2)+'\n');
+console.log('Generated Kit client from compiled Anchor IDL');

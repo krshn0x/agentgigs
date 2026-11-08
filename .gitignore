@@ -13,3 +13,5 @@ keys/
 **/*keypair.json
 *.log
 .DS_Store
+.surfpool/
+artifacts/

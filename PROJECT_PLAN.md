@@ -50,6 +50,8 @@ Render free web services sleep after idle and lose local files on restart. Free 
 
 Use a small organization: `web/` for React, `src/` for the hosted backend, and `programs/task_escrow/` for the Anchor program. Shared payout definitions and tests must keep JS/Rust semantics consistent.
 
+Visual direction selected by the user: take inspiration from Exponent's current interface—near-black surfaces, generous whitespace, refined typography, fine dividers, restrained warm-gold accents, and legible metrics/tables. Keep Orbit's own identity and use only Orbit's real task, payout, and experiment data; do not reuse Exponent branding or marketing figures. This is a visual reference, not a claim about the 2024 hackathon interface.
+
 Four screens:
 1. Dashboard: current network/readiness, task history and completed demo links.
 2. Create task: supported template, specification, reward, fixed worker/reviewer public payout addresses, deadline, funding preview.

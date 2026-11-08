@@ -1,0 +1,17 @@
+function solve(input) {
+  const rows = [], row = [];
+  let cell = '', quoted = false;
+  for (let i = 0; i < input.length; i++) {
+    const c = input[i];
+    if (c === '"') {
+      if (quoted && input[i + 1] === '"') { cell += '"'; i++; }
+      else quoted = !quoted;
+    } else if (!quoted && c === ',') { row.push(cell); cell = ''; }
+    else if (!quoted && (c === '\n' || c === '\r')) {
+      if (c === '\r' && input[i + 1] === '\n') i++;
+      row.push(cell); rows.push(row.splice(0)); cell = '';
+      if (i === input.length - 1) return rows;
+    } else cell += c;
+  }
+  row.push(cell); rows.push(row); return rows;
+}
