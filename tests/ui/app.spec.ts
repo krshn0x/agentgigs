@@ -35,7 +35,7 @@ test('controlled wallet/API/RPC fixture exercises funding, commitment, evaluatio
   });
   await page.route('https://api.devnet.solana.com/**',async route=>{
     const {method}=route.request().postDataJSON();let result:any;
-    if(method==='getGenesisHash')result='EtWTRABZaYq6iMfeYKouRu166VU2xqa1';
+    if(method==='getGenesisHash')result='EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG';
     else if(method==='getAccountInfo')result={context:{slot:1},value:{lamports:1000000,owner:'BPFLoaderUpgradeab1e11111111111111111111111',executable:true,data:['','base64'],rentEpoch:0,space:0}};
     else if(method==='getLatestBlockhash')result={context:{slot:1},value:{blockhash:'11111111111111111111111111111111',lastValidBlockHeight:999999}};
     else if(method==='simulateTransaction')result={context:{slot:1},value:{err:null,logs:[],unitsConsumed:30000,loadedAccountsDataSize:2000,returnData:null}};

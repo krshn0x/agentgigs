@@ -9,7 +9,7 @@ const bytes=(hex:string)=>Uint8Array.from(hex.match(/.{2}/g)!.map(x=>parseInt(x,
 export async function prepare(task:any,action:string,programId:string){
   const connected=client.wallet.getState().connected;
   if(!connected?.signer||connected.account.address!==task.creator)throw new Error('Connect the task creator wallet.');
-  if(await client.rpc.getGenesisHash().send()!=='EtWTRABZaYq6iMfeYKouRu166VU2xqa1')throw new Error('Devnet is required.');
+  if(await client.rpc.getGenesisHash().send()!=='EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG')throw new Error('Devnet is required.');
   const program=await client.rpc.getAccountInfo(address(programId),{encoding:'base64',commitment:'confirmed'}).send();
   if(!program.value?.executable)throw new Error('Escrow program is not deployed.');
   const version=connected.supportedTransactionVersions.has(1)?1:0;
