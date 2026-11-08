@@ -94,3 +94,7 @@ Automatic application deployment is off. Pushes do not update the public app aut
 ## Sharing changes back
 
 Commit changes on `opencode/work` and report the commit IDs. Bring reviewed changes into `main` with a deliberate merge or cherry-pick after checking both worktrees' status. Avoid force-pushing or resetting either worktree. Update the task queue and deployment record when milestones actually change.
+
+## Latest user direction
+
+AgentGigs now uses a SpaceX/Cursor-inspired monochrome design with original vector branding. `web/Brand.tsx`, `web/brand.css`, and `web/public/agentgigs-*.svg` own the new visual layer. Both model roles use `nvidia/nemotron-3.5-lightning:free`: an explicit hosted probe returned valid schemas and 20/20 evaluator cases. This is diagnostic evidence, not an escrow settlement. See the latest queue notes before resuming.

@@ -28,9 +28,9 @@ services:
       - key: PROGRAM_ID
         sync: false
       - key: WORKER_MODEL
-        value: cohere/north-mini-code:free
+        value: nvidia/nemotron-3.5-lightning:free
       - key: REVIEWER_MODEL
-        value: cohere/north-mini-code:free
+        value: nvidia/nemotron-3.5-lightning:free
       - key: SOLANA_RPC_URL
         value: https://api.devnet.solana.com
 databases:

@@ -26,7 +26,7 @@ Updated 2026-11-08. Work proceeds in dependency order during the active session;
 
 1. The creator must connect and sign in with the configured operator wallet, review the expired-task refund simulation, and approve it in the wallet.
 2. Create and fund a fresh task, then approve its review commitment and settlement individually after simulation and inspection.
-3. Model preference: user requested free DeepSeek or GLM. Current OpenRouter catalog has neither at zero pricing. Keep free-only routing; model choice is pending. OpenCode free offerings are limited to OpenCode clients.
+3. Model choice resolved: `nvidia/nemotron-3.5-lightning:free` worked for both roles with the existing Render OpenRouter key. Free-only routing remains enforced.
 
 ## Model recovery evidence — 2026-11-08
 
@@ -34,3 +34,10 @@ Updated 2026-11-08. Work proceeds in dependency order during the active session;
 - Explicit hosted diagnostic made real worker/reviewer calls to `cohere/north-mini-code:free`; both returned valid schemas. Independent grader returned `allPass:false`, reviewer prediction 9900 basis points. This is a diagnostic, without escrow commitment or payout.
 - Retired Qwen defaults removed from config, template, and Blueprint. Provider rejection status is now classified without exposing provider bodies or credentials. Expired tasks show refund guidance and no AI retry control.
 - Ten provider/config tests passed; production build passed. Normal Render build command restored after the one-time diagnostic.
+
+## AgentGigs design and model update — 2026-11-08
+
+- User requested SpaceX/Cursor visual inspiration: custom angular vector logo and favicon, horizontal navigation, larger typography, monochrome surfaces, original orbital workflow schematic, and responsive creation/detail/lab screens.
+- Gemma 4 31B free probe returned HTTP 429, so it was not selected. NVIDIA Nemotron 3.5 Lightning free returned valid worker/reviewer JSON, its source passed all 20 independent diagnostic cases, and the reviewer predicted 7800 basis points. Diagnostic deployment: `dep-dbo7v9mc6qcc73ctc3tg`. This was not a funded escrow task or settlement.
+- Both Render model settings, source defaults, `.env.example`, and Blueprint are pinned to NVIDIA. Normal build command restored after explicit probes.
+- Production build and all three browser checks passed; desktop/mobile screenshots reviewed. Wallet behavior remains covered by the controlled fixture.

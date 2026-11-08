@@ -1,7 +1,7 @@
 import {test,expect} from '@playwright/test';import {readFile,mkdir} from 'node:fs/promises';import {generateKeyPairSigner,getAddressEncoder,getBase58Decoder} from '@solana/kit';
 test('public overview, honest fixture, and finite lab export',async({page})=>{
   const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
-  await page.goto('/');await expect(page.getByRole('heading',{name:/Good work deserves/})).toBeVisible();await expect(page.getByText('Live setup incomplete')).toBeVisible();
+  await page.goto('/');await expect(page.getByRole('heading',{name:/Work for agents/})).toBeVisible();await expect(page.getByText('Live setup incomplete')).toBeVisible();
   await mkdir('artifacts',{recursive:true});await page.screenshot({path:'artifacts/overview-desktop.png',fullPage:true});
   await page.getByRole('button',{name:'Explore fixture'}).click();await expect(page.getByText('20/20 passed')).toBeVisible();await expect(page.getByText(/No OpenRouter call, escrow funding/)).toBeVisible();await expect(page.getByRole('button',{name:'Simulate funding'})).toHaveCount(0);await page.screenshot({path:'artifacts/task-fixture-desktop.png',fullPage:true});
   await page.getByRole('link',{name:'Research lab',exact:false}).first().click();await expect(page.getByRole('heading',{name:/When does the/})).toBeVisible();await page.getByLabel('Maximum joint budget').selectOption('0.25');await page.getByLabel('Peer score multiplier').selectOption('0');await expect(page.getByText('Truthful compliance is defeated')).toBeVisible();
