@@ -7,7 +7,7 @@ export async function challenge(store,wallet,origin,c){
   const recent=Number((await c.query("SELECT count(*) FROM challenges WHERE wallet=$1 AND expires_at>now()+interval '4 minutes'",[wallet])).rows[0].count);
   invariant(recent<5,'AUTH_RATE_LIMIT',429);
   const id=randomUUID(),nonce=randomBytes(24).toString('hex'),expires=new Date(Date.now()+300000);
-  const message=`Orbit Tasks operator sign-in\nOrigin: ${origin}\nWallet: ${wallet}\nChallenge: ${id}\nNonce: ${nonce}\nExpires: ${expires.toISOString()}\nThis signature authorizes a two-hour session, not a transaction.`;
+  const message=`Agent Gigs operator sign-in\nOrigin: ${origin}\nWallet: ${wallet}\nChallenge: ${id}\nNonce: ${nonce}\nExpires: ${expires.toISOString()}\nThis signature authorizes a two-hour session, not a transaction.`;
   await c.query('INSERT INTO challenges(id,wallet,message,expires_at,session_nonce) VALUES($1,$2,$3,$4,$5)',[id,wallet,message,expires,randomBytes(32).toString('hex')]);
   return {id,message,expiresAt:expires.toISOString()};
 }

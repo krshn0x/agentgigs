@@ -1,4 +1,4 @@
-# Orbit Tasks submission preparation
+# Agent Gigs submission preparation
 
 This is an outline for the team to complete in its own words. It contains no claimed live results. Judges should be able to distinguish the local fixture, controlled tests, actual model responses, and confirmed devnet transactions.
 

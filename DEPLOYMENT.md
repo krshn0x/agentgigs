@@ -2,7 +2,7 @@
 
 Public app: https://orbit-tasks-wcsa.onrender.com
 
-The app and its Postgres database are deployed. Public inspection, the labeled handwritten fixture, and the finite research lab are available. Live AI execution and devnet escrow transactions are still unavailable pending model credentials, public wallet addresses, and program deployment.
+The Agent Gigs app and its Postgres database are deployed. Hosted readiness is fully green for database, devnet program/network, free models, and all three public wallets. The devnet escrow program is deployed. A real AI task and creator-approved escrow lifecycle remain to be demonstrated.
 
 | Resource | Verified state |
 | --- | --- |
@@ -47,7 +47,9 @@ The public site stopped responding around 14:00 UTC (TLS fine, no HTTP response;
 
 ## Next configuration
 
-Use the service's [Render environment settings](https://dashboard.render.com/web/srv-dbo3h9rrjlhs73aaqkh0/env) to supply `OPENROUTER_API_KEY`. The three public wallet settings and the actual deployed `PROGRAM_ID` are already configured (verified at 15:45 UTC). The database URL is already bound internally; it does not need to be copied into chat. Keep secrets out of the repository and all `VITE_` variables.
+No additional service configuration is currently listed as pending. The next step is the live task sequence in `TASK_QUEUE.md`; each transaction must be reviewed and approved by the creator in their wallet.
+
+The `OPENROUTER_API_KEY`, three public wallet settings, and deployed `PROGRAM_ID` are configured privately in Render and readiness checks passed. The database URL is bound internally; it does not need to be copied into chat. Keep secrets out of the repository and all `VITE_` variables.
 
 An empty `APP_ORIGIN` uses Render's assigned HTTPS origin through `RENDER_EXTERNAL_URL`. An explicit value is needed only to override it, such as for a custom domain. See [Render's default environment variables](https://render.com/docs/environment-variables).
 

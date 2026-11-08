@@ -87,7 +87,7 @@ export function createApp({config,store,chain,service}){
 export async function start(){
   const config=readConfig(),store=new Store(config.databaseUrl),chain=new Chain(config),service=new TaskService(store,chain,config);
   if(store.pool){await store.migrate();await store.recover();}
-  const server=createApp({config,store,chain,service});server.listen(config.port,'0.0.0.0',()=>console.info(`Orbit Tasks http://localhost:${config.port}`));
+  const server=createApp({config,store,chain,service});server.listen(config.port,'0.0.0.0',()=>console.info(`Agent Gigs http://localhost:${config.port}`));
   const shutdown=()=>server.close(async()=>{await Promise.allSettled([...service.jobs]);await store.close();process.exit(0);});process.on('SIGTERM',shutdown);process.on('SIGINT',shutdown);return server;
 }
 if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url))await start();

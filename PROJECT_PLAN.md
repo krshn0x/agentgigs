@@ -1,8 +1,8 @@
-# Orbit Tasks: complete implementation handoff
+# Agent Gigs: complete implementation handoff
 
 ## User request and accepted decisions
 
-Build a working Solana x MLH AI-track hackathon product. The user explicitly changed the original plan from extending `solana-platform` to **a new git repository and a new Codex context**. This repository was initialized on `main` for that purpose. The implementation and public Render deployment are now complete; live AI and devnet milestones remain pending. See `OPENCODE_HANDOFF.md`, `TASK_QUEUE.md`, and `DEPLOYMENT.md` for current status. The sections below preserve the accepted design and implementation requirements.
+Build a working Solana x MLH AI-track hackathon product. The user explicitly changed the original plan from extending `solana-platform` to **a new git repository and a new Codex context**. This repository was initialized on `main` for that purpose. Agent Gigs is implemented and deployed; hosted readiness and the devnet program are green. A real AI task and its creator-approved escrow lifecycle remain to be demonstrated. See `OPENCODE_HANDOFF.md`, `TASK_QUEUE.md`, and `DEPLOYMENT.md` for current status. The sections below preserve the accepted design and implementation requirements.
 
 Product: a developer funds a small coding task; a worker AI submits a solution; a reviewer AI predicts whether it passes; isolated execution grades it; the creator confirms the program-enforced payout in their wallet.
 
@@ -25,7 +25,7 @@ Do not claim that an ordinary AI-work marketplace or Brier scoring is new. No ex
 
 ## Stack
 
-- React 19, TypeScript, Vite; CSS with a compact responsive Orbit visual design. No Next.js or unnecessary agent framework.
+- React 19, TypeScript, Vite; CSS with a compact responsive Agent Gigs visual design. No Next.js or unnecessary agent framework.
 - Node.js 24 LTS for hosting, JavaScript ESM, native HTTP API, Zod runtime validation. Local Node is newer and supports the project.
 - Postgres with the `pg` client. Use a free Render Postgres database and free Render Node web service, serving the Vite build and API on one HTTPS origin. Store artifacts in Postgres, not ephemeral disk.
 - OpenRouter through native fetch. Initially pinned `qwen/qwen3-coder:free`; during setup on 2026-11-08 OpenRouter reported that slug no longer free, so the pin moved to the only coding-specialized free model then listed: `cohere/north-mini-code:free`, verified with the operator key (HTTP 200, exact slug returned). Validate availability at setup. No paid fallback. Record the actual returned model ID.
@@ -50,7 +50,7 @@ Render free web services sleep after idle and lose local files on restart. Free 
 
 Use a small organization: `web/` for React, `src/` for the hosted backend, and `programs/task_escrow/` for the Anchor program. Shared payout definitions and tests must keep JS/Rust semantics consistent.
 
-Visual direction selected by the user: take inspiration from Exponent's current interface—near-black surfaces, generous whitespace, refined typography, fine dividers, restrained warm-gold accents, and legible metrics/tables. Keep Orbit's own identity and use only Orbit's real task, payout, and experiment data; do not reuse Exponent branding or marketing figures. This is a visual reference, not a claim about the 2024 hackathon interface.
+Visual direction selected by the user: take inspiration from Exponent's current interface—near-black surfaces, generous whitespace, refined typography, fine dividers, restrained warm-gold accents, and legible metrics/tables. Keep Agent Gigs' own identity and use only its real task, payout, and experiment data; do not reuse Exponent branding or marketing figures. This is a visual reference, not a claim about the 2024 hackathon interface.
 
 Four screens:
 1. Dashboard: current network/readiness, task history and completed demo links.

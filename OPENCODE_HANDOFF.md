@@ -1,4 +1,4 @@
-# OpenCode handoff: Orbit Tasks
+# OpenCode handoff: Agent Gigs
 
 ## Start here
 
@@ -10,20 +10,20 @@ First action in the new OpenCode session: read the handoff, summarize current st
 
 ## Current result
 
-- Public app: https://orbit-tasks-wcsa.onrender.com
+- Product: Agent Gigs. Public app: https://orbit-tasks-wcsa.onrender.com
 - Private repository: https://github.com/krshn0x/orbit-tasks
 - Last deployed code commit: `c6b7dcba248b6c1f911f81be9d08d2e60712340e`.
 - Deployment evidence/docs commit before this handoff: `f1474e4`.
 - React app, Node API, Postgres persistence, wallet workflow, evaluator, Anchor escrow source, generated client, and finite research lab are implemented.
 - Render free web service and free Postgres are deployed in Singapore. Database readiness is verified. The workspace had no card on file when deployed.
 - Public desktop/mobile browser checks passed against the actual HTTPS site. All four screens are available. The bundled task is explicitly a handwritten local fixture with 20 passing evaluator cases; it has no AI call or onchain funding/payment.
-- No live OpenRouter response or devnet program deployment/funding/settlement has occurred. Do not describe those milestones as complete.
+- Hosted readiness was reported fully green on 2026-11-08: database, devnet program/network, free models, and all three public wallets. The devnet program is deployed. No completed real AI task, funding, review commitment, or settlement is recorded yet.
 
 ## Product and design decisions
 
 A developer funds one small coding task. A worker AI submits source; a reviewer AI predicts whether every hidden test will pass; the creator commits that prediction before grading; isolated execution produces evidence; the creator reviews and signs the computed devnet payout.
 
-The only supported task is a pure JavaScript CSV parser, `solve(input: string): string[][]`. Keep the narrow flow working. The frontend direction selected by the user is Exponent-inspired: near-black surfaces, restrained warm gold, refined typography, fine dividers, and legible metrics/tables. Orbit retains its own branding and data.
+The only supported task is a pure JavaScript CSV parser, `solve(input: string): string[][]`. Keep the narrow flow working. The product name is Agent Gigs. The frontend direction selected by the user is Exponent-inspired: near-black surfaces, restrained warm gold, refined typography, fine dividers, and legible metrics/tables. Agent Gigs retains its own branding and data.
 
 The public app is inspectable by everyone. Only the configured operator wallet can authenticate and advance live tasks. The creator confirms all real wallet signing. All service tiers and model routing must stay free. Use Solana devnet; never switch to mainnet or configure a hosted wallet signer.
 
@@ -71,12 +71,11 @@ The local browser suite defaults to port 3000 and can reuse the original preview
 
 ## Next queued tasks
 
-1. Obtain three distinct **public** Solana addresses: operator/creator, worker recipient, reviewer recipient. They have been requested but not supplied.
+1. Done: the three public Solana addresses are configured and hosted readiness verified them on 2026-11-08.
 2. Done on 2026-11-08 via the Render API with the owner-supplied key: `OPENROUTER_API_KEY` set privately in Render's environment, and both model IDs pinned to `cohere/north-mini-code:free` (`qwen/qwen3-coder:free` exited the free catalog) with no paid fallback.
-3. Verify the intended compiled program and creator address, obtain devnet test SOL, prepare a concrete deployment review with estimated fees, then request the required signing approval. The source program address `E8xdjtgfA7qBWDs7imTntLPoyQ51ZZhf9zUbuQSHDg7i` is a build address, not deployment evidence.
-4. Set the actual deployed `PROGRAM_ID` and public wallet settings. Both payout wallets must be ordinary system accounts with the current rent-exempt balance. Confirm readiness.
-5. Run one genuine task: fund → worker/reviewer → commit → evaluate → settle. Simulate and show the exact recipients, amounts, fee payer, cluster, fees, and rent before each user-approved signature. Reconcile uncertain signatures before building another transaction.
-6. Collect real task/transaction links, payout evidence, and a demo video. The public app checks are complete; live-task evidence is pending.
+3. Done: the devnet escrow program at `E8xdjtgfA7qBWDs7imTntLPoyQ51ZZhf9zUbuQSHDg7i` was deployed by the operator wallet; deployment signature is recorded in `TASK_QUEUE.md`.
+4. Next: run one real task with the creator present. Review and approve funding, review commitment, and settlement separately in the wallet; inspect the artifacts and payout balances.
+5. Collect real task/transaction links, payout evidence, and a demo video. See `TASK_QUEUE.md` for the current status.
 
 Render environment page: https://dashboard.render.com/web/srv-dbo3h9rrjlhs73aaqkh0/env
 

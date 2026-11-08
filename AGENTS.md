@@ -1,4 +1,4 @@
-# Orbit Tasks
+# Agent Gigs
 
 This repository is the user's Solana x MLH AI-track hackathon project. Implementation and public hosting are complete; live AI/devnet setup remains pending. The primary checkout is `/Users/krishna/orbit-tasks`; the user also authorized OpenCode development in the separate `/Users/krishna/orbit-tasks-opencode` worktree on `opencode/work`. Work in the checkout assigned to the current session.
 

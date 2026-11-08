@@ -1,8 +1,8 @@
-# Orbit Tasks
+# Agent Gigs
 
 A focused coding-task demo: fund a CSV repair task, inspect an AI worker’s source and an AI reviewer’s prediction, freeze that review on Solana devnet, grade the frozen source in QuickJS, then confirm program-enforced payouts in the creator’s browser wallet.
 
-**Current status:** deployed at https://orbit-tasks-wcsa.onrender.com with a connected Postgres database. Public fixture and research pages pass the hosted desktop/mobile checks. Live OpenRouter calls and devnet deployment/funding/settlement remain pending. The bundled example is explicitly a handwritten local fixture. See [deployment evidence](DEPLOYMENT.md).
+**Current status:** Agent Gigs is deployed at https://orbit-tasks-wcsa.onrender.com. Hosted readiness is green for Postgres, devnet program/network, free model access, and all three public wallets. The devnet escrow program is deployed. The next milestone is a real AI task and creator-approved escrow lifecycle; the public fixture remains a separate handwritten example. See [the task queue](TASK_QUEUE.md) and [deployment evidence](DEPLOYMENT.md).
 
 ## Run locally
 
@@ -22,15 +22,13 @@ Copy `.env.example` to `.env` in your editor and configure it privately. Do not 
 
 For Vite hot reload, set `APP_ORIGIN=http://localhost:5173` for the API process, run `npm run dev`, and run `npm run web:dev` separately. Production serves built assets and API from one origin.
 
-## External setup still required
+## Current next step
 
-Use [the task queue](TASK_QUEUE.md) for current progress and [the launch checklist](LAUNCH_CHECKLIST.md) for deployment and the real-demo sequence. An ignored local `.env` template is prepared. Run `npm run preflight` after configuring it to check readiness without signing transactions or running inference; it reports missing setting names and sanitized status codes. See [the submission outline](SUBMISSION_OUTLINE.md) for the evidence still to collect.
+Use [the task queue](TASK_QUEUE.md) for current progress and [the launch checklist](LAUNCH_CHECKLIST.md) for the real-demo sequence. Hosted readiness is already green. The remaining work is to sign in with the configured operator wallet, run the task, review each transaction and confirm it in the wallet, then collect task, payout, and demo evidence. Each real transaction requires the creator's explicit approval in their wallet.
 
-1. **Public addresses:** three distinct operator/creator, worker payout, and reviewer payout addresses. The operator is the only wallet allowed to sign in and start AI runs. Payout recipients are fixed at funding. Both recipients must already be plain system wallets with at least the zero-data-account rent-exempt balance (typically about 0.000891 devnet SOL). Keep that balance until settlement; emptying a recipient can make a small payout fail rent checks. Funding simulation and backend readiness validate this prerequisite.
-2. **OpenRouter:** configure `OPENROUTER_API_KEY` privately. Both roles pinned to `cohere/north-mini-code:free` (verified free on 2026-11-08; `qwen/qwen3-coder:free` left the free catalog). Readiness authenticates the key, checks any reported free daily quota, and requires zero prompt/completion pricing in the current model catalog. Calls prohibit paid routing and provider fallback. Free quota availability remains provider-controlled.
-3. **Devnet program:** review the compiled source and deploy with your own wallet approval. The current source program address is `E8xdjtgfA7qBWDs7imTntLPoyQ51ZZhf9zUbuQSHDg7i`; this is a build address, not a claimed deployment. Set `PROGRAM_ID` to the address of this deployed build. A different program ID requires updating the source and Anchor config, rebuilding, and regenerating the client. No signing key belongs in Render or this repository. Build output under `target/` is ignored and must never be uploaded as a source archive.
-4. **Creator funding:** obtain devnet test SOL for reward, account rent, and fees. Default reward is 0.01 SOL; program maximum is 0.1 SOL. Native devnet SOL has no real value. Deployment fees also require test SOL; their amount must be reviewed before deployment signing.
-5. **Render environment:** hosting and database setup are complete. Add the remaining private model key and public wallet/program settings in the service's environment page. The workspace had no card on file at deployment, and both Blueprint plans are free. Keep chargeable overages and paid upgrades disabled. HTTPS sessions use Secure/HttpOnly/SameSite=Strict cookies.
+1. **Creator wallet:** sign in with the configured operator address. Keep all keys in your wallet; no hosted signer is used.
+2. **Live task:** confirm the task details and funding transaction in the wallet. Wait for separate worker and reviewer model stages, then inspect the frozen artifacts and grader report.
+3. **Settlement:** review payout recipients, amounts, outcome, and transaction fees, then approve settlement in the wallet. Record the task, transaction, and recipient-balance evidence for the demo.
 
 `render.yaml` defines the deployed Node service and database; [DEPLOYMENT.md](DEPLOYMENT.md) records the observed result. Schema migration runs at startup. A free Render service can sleep and its local files are ephemeral; all live records are in Postgres. Free Postgres expires after 30 days: export public artifacts before expiry. See [Render’s free service limits](https://render.com/docs/free) and [Blueprint fields](https://render.com/docs/blueprint-spec).
 
