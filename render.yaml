@@ -28,9 +28,9 @@ services:
       - key: PROGRAM_ID
         sync: false
       - key: WORKER_MODEL
-        value: qwen/qwen3-coder:free
+        value: cohere/north-mini-code:free
       - key: REVIEWER_MODEL
-        value: qwen/qwen3-coder:free
+        value: cohere/north-mini-code:free
       - key: SOLANA_RPC_URL
         value: https://api.devnet.solana.com
 databases:

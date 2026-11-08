@@ -26,7 +26,14 @@ export async function callModel(role,task,config,fetcher=fetch,timeoutMs=90000) 
     const started=Date.now(); let response;
     try {response=await fetcher('https://openrouter.ai/api/v1/chat/completions',{method:'POST',headers:{Authorization:`Bearer ${config.openrouterKey}`,'Content-Type':'application/json','HTTP-Referer':config.origin,'X-Title':'Agent Gigs'},body:JSON.stringify({model,messages,max_tokens:6000,temperature:0.2,reasoning:{enabled:false},provider:{allow_fallbacks:false,max_price:{prompt:0,completion:0}}}),signal:deadline});}
     catch {throw new AppError(deadline.aborted?'MODEL_TIMEOUT':'MODEL_UNAVAILABLE',503);}
-    if(!response.ok)throw new AppError(response.status===429?'MODEL_QUOTA_UNAVAILABLE':'MODEL_UNAVAILABLE',503);
+    if(!response.ok){
+      // Classify provider failures without exposing upstream bodies, prompts, or credentials.
+      const detail=(await response.text()).slice(0,16000);
+      const privacy=/data policy|privacy|data settings|data-policy/i.test(detail);
+      const code=privacy?'MODEL_PRIVACY_SETTINGS_REQUIRED':({400:'MODEL_REQUEST_REJECTED',401:'OPENROUTER_KEY_INVALID',402:'MODEL_CREDITS_UNAVAILABLE',403:'MODEL_ACCESS_DENIED',404:'MODEL_ENDPOINT_UNAVAILABLE',408:'MODEL_TIMEOUT',429:'MODEL_QUOTA_UNAVAILABLE',502:'MODEL_PROVIDER_UNAVAILABLE',503:'MODEL_PROVIDER_UNAVAILABLE'}[response.status]??'MODEL_UNAVAILABLE');
+      console.info(JSON.stringify({event:'model_request_rejected',status:response.status,code,role,model}));
+      throw new AppError(code,503);
+    }
     const length=Number(response.headers.get('content-length'));if(length>100000)throw new AppError('MODEL_RESPONSE_TOO_LARGE',503);
     const reader=response.body.getReader();let body='',bytes=0;const decoder=new TextDecoder();
     try{while(true){const {done,value}=await reader.read();if(done)break;bytes+=value.length;if(bytes>100000){await reader.cancel();throw new AppError('MODEL_RESPONSE_TOO_LARGE',503);}body+=decoder.decode(value,{stream:true});}}
