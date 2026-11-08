@@ -2,6 +2,8 @@
 
 ## Current evidence
 
+- Source uploaded to the private repository https://github.com/krshn0x/orbit-tasks (`main`, implementation commit `60924ec`). The ongoing dependency order is recorded in `TASK_QUEUE.md`.
+
 - Local application, escrow source, evaluator, and finite research lab are implemented.
 - Exponent-inspired frontend production build passes. All three browser checks pass after the visual update: public fixture/lab, mobile overflow and access checks, and controlled wallet/RPC flow.
 - The public example is handwritten and locally evaluated. It has no AI request or onchain payment.
@@ -29,7 +31,7 @@ After supplying the database URL, run `npm run db:migrate`. Then run `npm run bu
 
 ## Source and Render deployment
 
-1. Choose the source repository and commit the implementation. Keep `.env`, `target/`, `keys/`, `.data/`, build keypairs, and test artifacts excluded. Source publication needs the selected repository and account access.
+1. Use the prepared private `krshn0x/orbit-tasks` repository on `main`. Keep `.env`, `target/`, `keys/`, `.data/`, build keypairs, and test artifacts excluded from future commits.
 2. Connect Render and grant it access to that repository. The existing `render.yaml` defines one free Node service and one free Postgres instance in Singapore.
 3. Confirm the account cannot charge overages, then review the Blueprint before creating resources. Do not select paid upgrades.
 4. Supply the private environment settings in Render. Use the database's internal connection string through the Blueprint binding. Set `APP_ORIGIN` to the resulting exact HTTPS origin. Startup runs the schema migration automatically.
