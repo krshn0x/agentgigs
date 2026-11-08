@@ -16,23 +16,28 @@
 - Grader report SHA-256: `8ab093a6bb290909c2cac1143b1066e6e7246fd3b9affc410e3bf0f681a411da`.
 - Actual result: 5/20 tests passed; 15 output mismatches; `allPass:false`. This is a genuine unsuccessful AI submission, not a fixture or a successful parser claim.
 
-## Settlement review
+## Settlement verified on devnet
 
-Simulation passed in Chrome: 7,868 compute units, transaction v1. Expected distribution: worker 0; reviewer 555,000; creator refund 9,445,000 lamports. Estimated fee 5,000 lamports, paid by creator. No additional rent; existing escrow rent remains in the account.
+Settlement transaction: [`4NyKQGoE5rG6iY3rKHjYdYYFwYjN8PPpTgKTva8Rq7dv3NgXpW2qp4QjJV5UA8C2bwbGmqFgEGm84E6fKi4kcvnY`](https://explorer.solana.com/tx/4NyKQGoE5rG6iY3rKHjYdYYFwYjN8PPpTgKTva8Rq7dv3NgXpW2qp4QjJV5UA8C2bwbGmqFgEGm84E6fKi4kcvnY?cluster=devnet)
+Attestation matches: `true`. Status: `settled`.
 
-Settlement is awaiting explicit creator approval and wallet signing. Do not describe it as completed until the chain receipt and balance changes have been verified.
+Observed distribution matches the Anchor Brier scoring arithmetic to the exact lamport:
+- Worker: 0 lamports (unsuccessful parser, 5/20 tests passed).
+- Reviewer: +555,000 lamports (from 2,000,000 to 2,555,000).
+- Creator refund: +9,445,000 lamports (net +9,440,000 lamports after 5,000 lamport network fee, from 7,948,666,070 to 7,958,106,070).
+- Escrow PDA: 1,986,280 lamports (exactly the rent-exempt reserve preserved).
 
-Public balances before settlement, confirmed RPC slot 520046807:
+Public balances verified after settlement on devnet RPC:
 
-| Account | Lamports |
-| --- | ---: |
-| Creator `DsDDDEA5Q9mnJSj2HB51Pc1UCEDrmGGbCc2CdaQYJmmJ` | 7,948,666,070 |
-| Worker `9LUb9YsQDy5hSiAGBrpzr3bGp1c2hWXwVMRGGR7GC7Jv` | 2,000,000 |
-| Reviewer `8gkcBaMWVP4rYWEauS2N7S9mzkFq1QQRfymigpPvxfVx` | 2,000,000 |
-| Escrow | 11,986,280 |
+| Account | Before (Lamports) | After (Lamports) | Delta |
+| --- | ---: | ---: | ---: |
+| Creator `DsDDDEA5Q9mnJSj2HB51Pc1UCEDrmGGbCc2CdaQYJmmJ` | 7,948,666,070 | 7,958,106,070 | +9,440,000 (refund minus fee) |
+| Worker `9LUb9YsQDy5hSiAGBrpzr3bGp1c2hWXwVMRGGR7GC7Jv` | 2,000,000 | 2,000,000 | 0 |
+| Reviewer `8gkcBaMWVP4rYWEauS2N7S9mzkFq1QQRfymigpPvxfVx` | 2,000,000 | 2,555,000 | +555,000 (Brier reward) |
+| Escrow PDA `G6Vmai58KhgdriuGCz8mto1obaZV2zfT1BCkdzv3A571` | 11,986,280 | 1,986,280 | -10,000,000 (payout released) |
 
-## Still pending
+## Leftovers / Next steps
 
-- Approve and verify this settlement.
-- Refund expired task `396d7422-8bc8-443e-9e74-0e7110556edc` through a separate simulated, creator-approved transaction.
-- Capture final screenshots and a short walkthrough recording after verified settlement.
+1. **Submit on MLH**: Submit the project form at `https://www.mlh.com/events/solana-hackathon/submissions/new`.
+2. **Reclaim Expired Task Escrow**: Refund expired task `396d7422-8bc8-443e-9e74-0e7110556edc` (reclaims 0.01 SOL back to creator).
+3. **Walkthrough / Demo Video**: Record a 2–3 minute walkthrough video showing the settled task, code inspection, and research lab.

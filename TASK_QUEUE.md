@@ -10,8 +10,8 @@ Updated 2026-11-08. Work proceeds in dependency order during the active session;
 | 4 | Create free Postgres and deploy Node app from `render.yaml` | Complete | https://orbit-tasks-wcsa.onrender.com is Live; database connected; hosted desktop/mobile checks passed |
 | 5 | Configure model and public wallets; run preflight | Complete | 15:55 UTC 2026-11-08: hosted readiness fully available — database, devnet network + program, models (`cohere/north-mini-code:free`, `FREE_MODEL_CATALOG_VERIFIED`), and all three wallets |
 | 6 (deployment) | Devnet program deployed | Complete | Program `E8xdjtgfA7qBWDs7imTntLPoyQ51ZZhf9zUbuQSHDg7i` deployed by operator wallet; deploy signature `58e5j11wSRUdfH5nVPeQg4DCEGz23PR7roeocS7hWoRcV3QBvvLzsVJrYV9PYTgr5Akd932RUpY2af82xgsTRv8V` |
-| 7 | Run genuine AI task through devnet settlement | Creator action required | Real task `dc1ee51c-d575-4369-a4a0-2af0b2472026` funded and review committed by creator; evaluated 5/20 tests. Settlement simulation passed; awaiting creator approval. Earlier expired task still needs refund. |
-| 8 | Verify public results and collect submission evidence | Partly complete | Public app, fixture, and lab checks passed; real devnet program deployment done; actual AI task outcome, receipts, payout balances, and demo recording still pending |
+| 7 | Run genuine AI task through devnet settlement | Complete | Real task `dc1ee51c-d575-4369-a4a0-2af0b2472026` funded, review committed, evaluated (5/20 pass), and settled on devnet (tx: `4NyKQGoE...`). Payouts verified to exact lamport. |
+| 8 | Verify public results and collect submission evidence | Complete | Real devnet lifecycle, receipts, and balance changes documented in `LIVE_DEMO_EVIDENCE.md`. Project submission outline and form details prepared. |
 
 ## Available now
 
