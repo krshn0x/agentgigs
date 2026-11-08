@@ -8,9 +8,9 @@ Updated 2026-11-08. Work proceeds in dependency order during the active session;
 | 2 | Prepare and upload source | Complete | Private repository: https://github.com/krshn0x/orbit-tasks; implementation commit `60924ec` uploaded to `main` |
 | 3 | Sign in to Render and check billing | Complete | Browser sign-in verified; workspace is Hobby with no card on file |
 | 4 | Create free Postgres and deploy Node app from `render.yaml` | Complete | https://orbit-tasks-wcsa.onrender.com is Live; database connected; hosted desktop/mobile checks passed |
-| 5 | Configure model and public wallets; run preflight | Partly complete | Hosted wallets, `PROGRAM_ID`, and database verified green at 15:45 UTC after env sync; only `OPENROUTER_API_KEY` remains, added privately in Render env settings |
+| 5 | Configure model and public wallets; run preflight | Complete | 15:55 UTC 2026-11-08: hosted readiness fully available — database, devnet network + program, models (`cohere/north-mini-code:free`, `FREE_MODEL_CATALOG_VERIFIED`), and all three wallets |
 | 6 (deployment) | Devnet program deployed | Complete | Program `E8xdjtgfA7qBWDs7imTntLPoyQ51ZZhf9zUbuQSHDg7i` deployed by operator wallet; deploy signature `58e5j11wSRUdfH5nVPeQg4DCEGz23PR7roeocS7hWoRcV3QBvvLzsVJrYV9PYTgr5Akd932RUpY2af82xgsTRv8V` |
-| 7 | Run genuine AI task through devnet settlement | Queued | Only remaining setting is `OPENROUTER_API_KEY` in Render env; deployed program, wallets, database and hosted readiness are green; creator confirms each reviewed transaction |
+| 7 | Run genuine AI task through devnet settlement | Ready to run | All hosted readiness checks green; deployed program matches config; only operator wallet sign-in and per-transaction creator approvals remain |
 | 8 | Verify public results and collect submission evidence | Partly complete | Public app, fixture, and lab checks passed; real devnet program deployment done; actual AI task outcome, receipts, payout balances, and demo recording still pending |
 
 ## Available now

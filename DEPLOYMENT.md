@@ -38,10 +38,11 @@ The public site stopped responding around 14:00 UTC (TLS fine, no HTTP response;
 
 | Resource | Value |
 | --- | --- |
-| Deploy | `dep-dbo5513l550s738oen30`, Live |
+| Deploy | `dep-dbo5513l550s738oen30`, Live (earlier), superseded by `dep-dbo58u1srm7s73b0cn70` (16:23 UTC) |
 | Deployed commit | `b0c1657` (devnet genesis fix + Cursor-inspired UI restyle) |
-| Env sync | `PROGRAM_ID=E8xdjtgfA7qBWDs7imTntLPoyQ51ZZhf9zUbuQSHDg7i`, operator `DsDDDEA5Q9mnJSj2HB51Pc1UCEDrmGGbCc2CdaQYJmmJ`, worker `9LUb9YsQDy5hSiAGBrpzr3bGp1c2hWXwVMRGGR7GC7Jv`, reviewer `8gkcBaMWVP4rYWEauS2N7S9mzkFq1QQRfymigpPvxfVx` (all public values) |
-| Hosted readiness | database, network, wallets **available**; models pending `OPENROUTER_API_KEY` |
+| Deploy | `dep-dbo58u1srm7s73b0cn70`, Live (16:23 UTC) |
+| Env | `OPENROUTER_API_KEY` set privately; worker/reviewer pinned to `cohere/north-mini-code:free` (validated live; `qwen/qwen3-coder:free` exited the free catalog) |
+| Hosted readiness | **Fully available**: database, network, models (`FREE_MODEL_CATALOG_VERIFIED`), wallets — first fully green check |
 | Postgres `orbit-tasks-db` | available; free-tier expiry 2026-12-08 |
 
 ## Next configuration
