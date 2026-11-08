@@ -32,6 +32,8 @@ Use [the task queue](TASK_QUEUE.md) for current progress and [the launch checkli
 
 `render.yaml` prepares a single Node service and database. It is configuration, not evidence of deployment. Schema migration runs at startup. A free Render service can sleep and its local files are ephemeral; all live records are in Postgres. Free Postgres expires after 30 days: export public artifacts before expiry. See [Render’s free service limits](https://render.com/docs/free) and [Blueprint fields](https://render.com/docs/blueprint-spec).
 
+On Render, an unset or empty `APP_ORIGIN` uses Render's assigned `RENDER_EXTERNAL_URL` automatically. Set an explicit `APP_ORIGIN` for a custom domain. Missing model/wallet settings leave the public fixture and lab available while live controls remain unavailable.
+
 ## Program and client
 
 Pinned toolchain: Anchor 1.1.2 / Solana CLI 3.1.10. The Rust lockfile is committed. The generated Kit client and Anchor IDL are committed, so the hosted build does not need Rust, Anchor, or a program keypair.
