@@ -1,6 +1,6 @@
 # Agent Gigs
 
-This repository is the user's Solana x MLH AI-track hackathon project. Implementation and public hosting are complete; live AI/devnet setup remains pending. The primary checkout is `/Users/krishna/orbit-tasks`; the user also authorized OpenCode development in the separate `/Users/krishna/orbit-tasks-opencode` worktree on `opencode/work`. Work in the checkout assigned to the current session.
+This repository is the user's Solana x MLH AI-track hackathon project. Implementation, hosting, devnet deployment, and real model diagnostics are complete. A funded task expired after a provider failure; wallet-approved refund and a fresh task lifecycle remain pending. The primary checkout is `/Users/krishna/orbit-tasks`; the user also authorized OpenCode development in the separate `/Users/krishna/orbit-tasks-opencode` worktree on `opencode/work`. Work in the checkout assigned to the current session.
 
 For a resumed or OpenCode session, read `OPENCODE_HANDOFF.md`, `TASK_QUEUE.md`, and `DEPLOYMENT.md` first. The public app is https://orbit-tasks-wcsa.onrender.com. Continue existing work rather than restarting implementation.
 

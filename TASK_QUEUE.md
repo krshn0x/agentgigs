@@ -10,7 +10,7 @@ Updated 2026-11-08. Work proceeds in dependency order during the active session;
 | 4 | Create free Postgres and deploy Node app from `render.yaml` | Complete | https://orbit-tasks-wcsa.onrender.com is Live; database connected; hosted desktop/mobile checks passed |
 | 5 | Configure model and public wallets; run preflight | Complete | 15:55 UTC 2026-11-08: hosted readiness fully available — database, devnet network + program, models (`cohere/north-mini-code:free`, `FREE_MODEL_CATALOG_VERIFIED`), and all three wallets |
 | 6 (deployment) | Devnet program deployed | Complete | Program `E8xdjtgfA7qBWDs7imTntLPoyQ51ZZhf9zUbuQSHDg7i` deployed by operator wallet; deploy signature `58e5j11wSRUdfH5nVPeQg4DCEGz23PR7roeocS7hWoRcV3QBvvLzsVJrYV9PYTgr5Akd932RUpY2af82xgsTRv8V` |
-| 7 | Run genuine AI task through devnet settlement | Ready to run | All hosted readiness checks green; deployed program matches config; only operator wallet sign-in and per-transaction creator approvals remain |
+| 7 | Run genuine AI task through devnet settlement | Creator action required | Existing funded task `396d7422-8bc8-443e-9e74-0e7110556edc` failed inference and expired. Refund 0.01 devnet SOL through the wallet, then fund a fresh task. Hosted worker/reviewer diagnostic now succeeds. |
 | 8 | Verify public results and collect submission evidence | Partly complete | Public app, fixture, and lab checks passed; real devnet program deployment done; actual AI task outcome, receipts, payout balances, and demo recording still pending |
 
 ## Available now
@@ -24,6 +24,13 @@ Updated 2026-11-08. Work proceeds in dependency order during the active session;
 
 ## Pending handoffs
 
-1. Hosting and database setup are complete. The workspace is Hobby with no card on file. The public app serves the labeled fixture and lab while live credentials remain unset.
-2. Provide the three distinct public wallet addresses. Keep keys and seed phrases in the user's wallet.
-3. Configure private service credentials directly in the ignored `.env` or the Render environment settings. No credentials belong in this file or the repository.
+1. The creator must connect and sign in with the configured operator wallet, review the expired-task refund simulation, and approve it in the wallet.
+2. Create and fund a fresh task, then approve its review commitment and settlement individually after simulation and inspection.
+3. Model preference: user requested free DeepSeek or GLM. Current OpenRouter catalog has neither at zero pricing. Keep free-only routing; model choice is pending. OpenCode free offerings are limited to OpenCode clients.
+
+## Model recovery evidence — 2026-11-08
+
+- Deployed code `88a9538`, Render deploy `dep-dbo7s6bbc2fs73fjik90`, Live.
+- Explicit hosted diagnostic made real worker/reviewer calls to `cohere/north-mini-code:free`; both returned valid schemas. Independent grader returned `allPass:false`, reviewer prediction 9900 basis points. This is a diagnostic, without escrow commitment or payout.
+- Retired Qwen defaults removed from config, template, and Blueprint. Provider rejection status is now classified without exposing provider bodies or credentials. Expired tasks show refund guidance and no AI retry control.
+- Ten provider/config tests passed; production build passed. Normal Render build command restored after the one-time diagnostic.
