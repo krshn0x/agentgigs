@@ -8,10 +8,9 @@ Updated 2026-11-08. Work proceeds in dependency order during the active session;
 | 2 | Prepare and upload source | Complete | Private repository: https://github.com/krshn0x/orbit-tasks; implementation commit `60924ec` uploaded to `main` |
 | 3 | Sign in to Render and check billing | Complete | Browser sign-in verified; workspace is Hobby with no card on file |
 | 4 | Create free Postgres and deploy Node app from `render.yaml` | Complete | https://orbit-tasks-wcsa.onrender.com is Live; database connected; hosted desktop/mobile checks passed |
-| 5 | Configure model and public wallets; run preflight | Awaiting settings | Private OpenRouter key in Render environment; operator, worker, reviewer public addresses; hosted database is already configured |
+| 5 | Configure model and public wallets; run preflight | Partly complete | Hosted wallets, `PROGRAM_ID`, and database verified green at 15:45 UTC after env sync; only `OPENROUTER_API_KEY` remains, added privately in Render env settings |
 | 6 (deployment) | Devnet program deployed | Complete | Program `E8xdjtgfA7qBWDs7imTntLPoyQ51ZZhf9zUbuQSHDg7i` deployed by operator wallet; deploy signature `58e5j11wSRUdfH5nVPeQg4DCEGz23PR7roeocS7hWoRcV3QBvvLzsVJrYV9PYTgr5Akd932RUpY2af82xgsTRv8V` |
-| — | Fixed truncated `DEVNET_GENESIS` constant in `src/chain.mjs`; corrected fixture genesis in `tests/chain.test.mjs` | Complete | Preflight network+wallets green; 33/33 tests pass |
-| 7 | Run genuine AI task through devnet settlement | Queued | Hosted/local readiness checks pass; deployed matching program; creator confirms each reviewed transaction; needs `DATABASE_URL` + `OPENROUTER_API_KEY` |
+| 7 | Run genuine AI task through devnet settlement | Queued | Only remaining setting is `OPENROUTER_API_KEY` in Render env; deployed program, wallets, database and hosted readiness are green; creator confirms each reviewed transaction |
 | 8 | Verify public results and collect submission evidence | Partly complete | Public app, fixture, and lab checks passed; real devnet program deployment done; actual AI task outcome, receipts, payout balances, and demo recording still pending |
 
 ## Available now

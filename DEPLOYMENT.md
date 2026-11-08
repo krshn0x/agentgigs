@@ -32,9 +32,21 @@ Run the hosted public checks with:
 PLAYWRIGHT_BASE_URL=https://orbit-tasks-wcsa.onrender.com npm run test:ui -- --grep 'public overview|mobile pages'
 ```
 
+## Recovery and restyle deploy — 2026-11-08 (15:45 UTC)
+
+The public site stopped responding around 14:00 UTC (TLS fine, no HTTP response; platform status green). The instance recovered after a suspend→resume cycle via the Render API, and a fresh deploy then shipped the reviewed `main` work:
+
+| Resource | Value |
+| --- | --- |
+| Deploy | `dep-dbo5513l550s738oen30`, Live |
+| Deployed commit | `b0c1657` (devnet genesis fix + Cursor-inspired UI restyle) |
+| Env sync | `PROGRAM_ID=E8xdjtgfA7qBWDs7imTntLPoyQ51ZZhf9zUbuQSHDg7i`, operator `DsDDDEA5Q9mnJSj2HB51Pc1UCEDrmGGbCc2CdaQYJmmJ`, worker `9LUb9YsQDy5hSiAGBrpzr3bGp1c2hWXwVMRGGR7GC7Jv`, reviewer `8gkcBaMWVP4rYWEauS2N7S9mzkFq1QQRfymigpPvxfVx` (all public values) |
+| Hosted readiness | database, network, wallets **available**; models pending `OPENROUTER_API_KEY` |
+| Postgres `orbit-tasks-db` | available; free-tier expiry 2026-12-08 |
+
 ## Next configuration
 
-Use the service's [Render environment settings](https://dashboard.render.com/web/srv-dbo3h9rrjlhs73aaqkh0/env) to supply `OPENROUTER_API_KEY`, the three public wallet settings, and the actual deployed `PROGRAM_ID`. The database URL is already bound internally; it does not need to be copied into chat. Keep secrets out of the repository and all `VITE_` variables.
+Use the service's [Render environment settings](https://dashboard.render.com/web/srv-dbo3h9rrjlhs73aaqkh0/env) to supply `OPENROUTER_API_KEY`. The three public wallet settings and the actual deployed `PROGRAM_ID` are already configured (verified at 15:45 UTC). The database URL is already bound internally; it does not need to be copied into chat. Keep secrets out of the repository and all `VITE_` variables.
 
 An empty `APP_ORIGIN` uses Render's assigned HTTPS origin through `RENDER_EXTERNAL_URL`. An explicit value is needed only to override it, such as for a custom domain. See [Render's default environment variables](https://render.com/docs/environment-variables).
 
