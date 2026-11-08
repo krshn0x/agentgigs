@@ -24,7 +24,7 @@ export async function callModel(role,task,config,fetcher=fetch,timeoutMs=90000) 
   const deadline=AbortSignal.timeout(Math.min(timeoutMs,90000)); let last;
   for(let attempt=0;attempt<2;attempt++) {
     const started=Date.now(); let response;
-    try {response=await fetcher('https://openrouter.ai/api/v1/chat/completions',{method:'POST',headers:{Authorization:`Bearer ${config.openrouterKey}`,'Content-Type':'application/json','HTTP-Referer':config.origin,'X-Title':'Orbit Tasks'},body:JSON.stringify({model,messages,max_tokens:6000,temperature:0.2,provider:{allow_fallbacks:false,max_price:{prompt:0,completion:0}}}),signal:deadline});}
+    try {response=await fetcher('https://openrouter.ai/api/v1/chat/completions',{method:'POST',headers:{Authorization:`Bearer ${config.openrouterKey}`,'Content-Type':'application/json','HTTP-Referer':config.origin,'X-Title':'Orbit Tasks'},body:JSON.stringify({model,messages,max_tokens:6000,temperature:0.2,reasoning:{enabled:false},provider:{allow_fallbacks:false,max_price:{prompt:0,completion:0}}}),signal:deadline});}
     catch {throw new AppError(deadline.aborted?'MODEL_TIMEOUT':'MODEL_UNAVAILABLE',503);}
     if(!response.ok)throw new AppError(response.status===429?'MODEL_QUOTA_UNAVAILABLE':'MODEL_UNAVAILABLE',503);
     const length=Number(response.headers.get('content-length'));if(length>100000)throw new AppError('MODEL_RESPONSE_TOO_LARGE',503);
