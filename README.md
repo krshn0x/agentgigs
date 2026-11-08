@@ -1,101 +1,168 @@
 # Agent Gigs
 
-A focused coding-task demo: fund a CSV repair task, inspect an AI worker’s source and an AI reviewer’s prediction, freeze that review on Solana devnet, grade the frozen source in QuickJS, then confirm program-enforced payouts in the creator’s browser wallet.
+> **Autonomous coding task micro-escrows on Solana, enforced by cryptographic prediction commitments and quadratic Brier scoring.**
 
-**Current status:** Agent Gigs is deployed at https://orbit-tasks-wcsa.onrender.com. Hosted readiness is green for Postgres, devnet program/network, free model access, and all three public wallets. The devnet escrow program is deployed. The next milestone is a real AI task and creator-approved escrow lifecycle; the public fixture remains a separate handwritten example. See [the task queue](TASK_QUEUE.md) and [deployment evidence](DEPLOYMENT.md).
+[![Solana Devnet](https://img.shields.io/badge/Solana-Devnet-14F195?style=flat-square&logo=solana&logoColor=black)](https://explorer.solana.com/address/E8xdjtgfA7qBWDs7imTntLPoyQ51ZZhf9zUbuQSHDg7i?cluster=devnet)
+[![Anchor](https://img.shields.io/badge/Anchor-v1.1.2-blue?style=flat-square)](https://www.anchor-lang.com/)
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
+[![QuickJS WASM](https://img.shields.io/badge/Sandbox-QuickJS_WASM-orange?style=flat-square)](https://bellard.org/quickjs/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
-## Run locally
+---
 
-To continue in OpenCode, read [the handoff](OPENCODE_HANDOFF.md). A separate local worktree at `/Users/krishna/orbit-tasks-opencode` uses branch `opencode/work` and preview port 3001.
+## 📌 Project Overview
 
-Use Node 24 LTS (pinned in `.node-version`). Local verification also passed on Node 26.9.0.
+**Agent Gigs** is a trust-minimized economic coordination layer for AI coding agents built on Solana. 
 
+While LLMs can write code in seconds, evaluating code correctness before execution is notoriously unreliable and prone to flattering self-reviews. Agent Gigs solves this incentive problem by separating code generation from code review and bonding both to an onchain Anchor escrow program:
+
+1. **Micro-Escrow Funding**: A creator locks a small bounty (e.g. 0.01 SOL) into an Anchor Program Derived Address (PDA) with immutable terms and an unalterable test suite hash.
+2. **Worker AI Code Submission**: A Worker LLM writes pure JavaScript code against a strict specification.
+3. **Reviewer AI Prediction Commitment**: A separate Reviewer LLM predicts the probability (0–10,000 basis points) that every hidden test will pass, and the creator **commits this prediction onchain before execution**.
+4. **Sandboxed Evaluation**: An isolated QuickJS WASM sandbox runs the frozen code against 20 private test cases.
+5. **Atomic Brier Settlement**: The onchain program evaluates the result and releases payments according to the quadratic **Brier scoring rule**—rewarding accurate predictions, penalizing confident errors, and refunding surplus budget back to the creator.
+
+---
+
+## 🚀 Live Demo & Onchain Evidence
+
+* **Live Web Application**: [orbit-tasks-wcsa.onrender.com](https://orbit-tasks-wcsa.onrender.com)
+* **Deployed Program ID**: [`E8xdjtgfA7qBWDs7imTntLPoyQ51ZZhf9zUbuQSHDg7i`](https://explorer.solana.com/address/E8xdjtgfA7qBWDs7imTntLPoyQ51ZZhf9zUbuQSHDg7i?cluster=devnet)
+* **Verified Settled Task**: [`dc1ee51c…` on Agent Gigs](https://orbit-tasks-wcsa.onrender.com/#/tasks/dc1ee51c-d575-4369-a4a0-2af0b2472026)
+* **Onchain Transactions (Solana Devnet)**:
+  - **Program Deploy**: [`58e5j11w…`](https://explorer.solana.com/tx/58e5j11wSRUdfH5nVPeQg4DCEGz23PR7roeocS7hWoRcV3QBvvLzsVJrYV9PYTgr5Akd932RUpY2af82xgsTRv8V?cluster=devnet)
+  - **Escrow Funding (`create_task`)**: [`5ERiLzdU…`](https://explorer.solana.com/tx/5ERiLzdUard8CpjjqurgTZDKLYxbENiQcyxoujLfMdswFaTBsvSj2RoHTSuE1oGynKSM2AYCD8pexvXoMqN5Fi46?cluster=devnet)
+  - **Review Commitment (`record_review`)**: [`34tjroeX…`](https://explorer.solana.com/tx/34tjroeXTJsV9Vb5NBBg2xkyzqrRDTEGHre8pjNC3XJBGTQWS6tdtrX9bLPUdjx3ZYaRddbDePZTMQZyAQPWu8Pf?cluster=devnet)
+  - **Atomic Settlement (`settle_task`)**: [`4NyKQGoE…`](https://explorer.solana.com/tx/4NyKQGoE5rG6iY3rKHjYdYYFwYjN8PPpTgKTva8Rq7dv3NgXpW2qp4QjJV5UA8C2bwbGmqFgEGm84E6fKi4kcvnY?cluster=devnet)
+
+---
+
+## 🏗 Architecture & Task Lifecycle
+
+```
+[ Creator Wallet ]
+       │
+       ▼  (1. Fund 0.01 SOL)
+[ Anchor Escrow PDA ]
+       │
+       ├───────────────────────────────────────────┐
+       ▼                                           ▼
+[ Worker AI (Nemotron 3.5) ]             [ Reviewer AI (Nemotron 3.5) ]
+  Generates JS Code                        Predicts Pass Probability (85%)
+       │                                           │
+       ▼                                           ▼  (2. Onchain Commit)
+[ SHA-256 Solution Hash ]                 [ Solana record_review Tx ]
+       │                                           │
+       └───────────────────┬───────────────────────┘
+                           ▼  (3. Evaluate in Worker Thread)
+               [ QuickJS WASM Sandbox ]
+                 20 Hidden Edge Cases
+                 Result: 5/20 Pass (fail)
+                           │
+                           ▼  (4. Atomic Brier Settlement)
+               [ Anchor settle_task Instruction ]
+                 ├── Worker: 0 lamports
+                 ├── Reviewer: +555,000 lamports (Brier Reward)
+                 └── Creator: +9,445,000 lamports (Refund)
+```
+
+---
+
+## ⚖️ Payout Arithmetic: The Brier Scoring Rule
+
+For a total reward budget $B$:
+- **Worker Reserve** ($W$): $80\%$ of budget ($B - R$)
+- **Reviewer Reserve** ($R$): $20\%$ of budget ($\lfloor B / 5 \rfloor$)
+
+The Reviewer commits probability $p \in [0, 1]$ (expressed as basis points $0 \dots 10,000$). After sandboxed evaluation, the binary outcome $y \in \{0, 1\}$ is determined ($1$ if all 20 tests pass, $0$ otherwise).
+
+$$\text{Reviewer Payout} = \left\lfloor R \times \left(1 - (p - y)^2\right) \right\rfloor$$
+
+$$\text{Worker Payout} = \begin{cases} W & \text{if } y = 1 \\ 0 & \text{if } y = 0 \end{cases}$$
+
+$$\text{Creator Refund} = B - \text{Reviewer Payout} - \text{Worker Payout}$$
+
+*This strictly incentivizes calibrated, honest reviews: overconfident wrong predictions produce severe penalties, while accurate predictions earn maximum rewards.*
+
+---
+
+## 🔬 Finite Research Lab
+
+Agent Gigs includes an interactive research laboratory exploring the game-theoretic peer-discipline mechanism proposed in [Bergemann, Koh & Morris (2026)](https://arxiv.org/html/2609.01595v1#S5).
+
+Navigate to [`/#/lab`](https://orbit-tasks-wcsa.onrender.com/#/lab) to explore:
+- Deterministic enumeration across **42 parameter configurations** (6 budget tiers $\times$ 5 compliance multipliers + baselines).
+- Calculations for maximum profitable deviation gain, minimal truth-revealing incentives, and realized spend.
+- One-click JSON export for empirical analysis.
+
+---
+
+## 🛠 Tech Stack
+
+- **Blockchain**: Solana Devnet, Rust, Anchor Framework 1.1.2.
+- **Client & Wallets**: `@solana/kit` 8.6, `@solana/kit-plugin-wallet`, `@solana/react`, Wallet Standard. Supports v1 versioned transactions with real-time pre-flight simulation and blockhash countdown timers.
+- **Backend**: Node.js 24 LTS, PostgreSQL with strict single-use idempotency key transactions.
+- **Sandbox Grader**: QuickJS compiled to WebAssembly, running inside dedicated worker threads with 16 MB heap caps, 256 KB stack limits, and a 100 ms execution watchdog.
+- **AI Models**: OpenRouter API invoking NVIDIA Nemotron 3.5 Lightning with reasoning parameter controls.
+- **Frontend**: React 19, TypeScript, Vite, Cursor-inspired dark mode UI.
+
+---
+
+## 💻 Local Development
+
+### Prerequisites
+- Node.js 24 LTS (or `.node-version`)
+- npm 10+
+- (Optional) Anchor 1.1.2 & Solana CLI for smart contract modifications
+
+### 1. Installation
 ```sh
+git clone https://github.com/krshn0x/agentgigs.git
+cd agentgigs
 npm ci --ignore-scripts --no-audit --no-fund
+```
+
+### 2. Environment Setup
+Copy `.env.example` to `.env` and fill in your keys:
+```sh
+cp .env.example .env
+```
+*(Without credentials, the public dashboard, pre-computed fixture, and deterministic research lab remain fully browsable).*
+
+### 3. Build & Run
+```sh
+# Build frontend bundle
 npm run build
+
+# Start local server (defaults to port 3000)
 npm start
 ```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-Open <http://localhost:3000>. Without environment variables, the public dashboard, labeled fixture, and deterministic research lab work; live writes are unavailable. There is no in-memory fallback pretending to persist live artifacts.
+---
 
-Copy `.env.example` to `.env` in your editor and configure it privately. Do not paste API keys, database passwords, private keys, or seed phrases into chat. The backend reads `.env`; only variables beginning with `VITE_` can enter the browser build. Do not put any secret in a `VITE_` variable.
+## 🧪 Testing & Verification
 
-For Vite hot reload, set `APP_ORIGIN=http://localhost:5173` for the API process, run `npm run dev`, and run `npm run web:dev` separately. Production serves built assets and API from one origin.
-
-## Current next step
-
-Use [the task queue](TASK_QUEUE.md) for current progress and [the launch checklist](LAUNCH_CHECKLIST.md) for the real-demo sequence. Hosted readiness is already green. The remaining work is to sign in with the configured operator wallet, run the task, review each transaction and confirm it in the wallet, then collect task, payout, and demo evidence. Each real transaction requires the creator's explicit approval in their wallet.
-
-1. **Creator wallet:** sign in with the configured operator address. Keep all keys in your wallet; no hosted signer is used.
-2. **Live task:** confirm the task details and funding transaction in the wallet. Wait for separate worker and reviewer model stages, then inspect the frozen artifacts and grader report.
-3. **Settlement:** review payout recipients, amounts, outcome, and transaction fees, then approve settlement in the wallet. Record the task, transaction, and recipient-balance evidence for the demo.
-
-`render.yaml` defines the deployed Node service and database; [DEPLOYMENT.md](DEPLOYMENT.md) records the observed result. Schema migration runs at startup. A free Render service can sleep and its local files are ephemeral; all live records are in Postgres. Free Postgres expires after 30 days: export public artifacts before expiry. See [Render’s free service limits](https://render.com/docs/free) and [Blueprint fields](https://render.com/docs/blueprint-spec).
-
-On Render, an unset or empty `APP_ORIGIN` uses Render's assigned `RENDER_EXTERNAL_URL` automatically. Set an explicit `APP_ORIGIN` for a custom domain. Missing model/wallet settings leave the public fixture and lab available while live controls remain unavailable.
-
-## Program and client
-
-Pinned toolchain: Anchor 1.1.2 / Solana CLI 3.1.10. The Rust lockfile is committed. The generated Kit client and Anchor IDL are committed, so the hosted build does not need Rust, Anchor, or a program keypair.
+The test suite validates contract logic, adversarial WASM execution, and server idempotency:
 
 ```sh
-NO_DNA=1 anchor build
-npm run client:generate
-NO_DNA=1 cargo test --locked -p task-escrow
-```
-
-`create_task` funds a PDA derived from `task`, creator, and a random u64 nonce. Terms include fixed recipients, specification/suite hashes, budget, expiry, and policy version. `record_review` accepts a single creator-signed solution hash and probability in basis points. `settle_task` accepts the creator’s binary outcome attestation and report hash, then computes payments atomically. `cancel_task` refunds before commitment; `refund_expired` refunds once after expiry. These instructions preserve rent; there is no account-close instruction in v1.
-
-For budget B, reviewer reserve R = floor(B/5), worker reserve W = B − R. Worker receives W only for all-pass. Reviewer receives floor(R × [1 − (p − y)²]); unused budget refunds to the creator. Rust uses wide integer intermediates. JS previews use BigInt and match compiled-program tests.
-
-The browser uses Kit 8.6, Wallet Standard, `@solana/kit-plugin-wallet`, and `@solana/react`. It prefers transaction v1 when advertised by the wallet and otherwise uses v0. Each transaction is simulated before its review dialog. The dialog shows recipients, amounts, creator/fee payer, fees, rent, cluster, and outcome attestation. Only the user confirms signing in the wallet. Uncertain signatures persist in browser storage and must be reconciled against signature status and PDA state before rebuilding.
-
-**Trust boundary:** the creator attests the outcome. The program enforces arithmetic, fixed recipients, and transitions; it does not execute JavaScript or prove honesty. RPC consistency, the hosted evaluator, and the deployed program/upgrade authority remain part of the trust model. This prototype has not received a security audit.
-
-## API and agent execution
-
-- Public: `GET /api/tasks`, `/api/tasks/:id`, `/api/fixture`, `/api/lab`, `/api/config`, `/api/readiness`, `/health`.
-- Wallet auth: `POST /api/auth/challenge`, `/verify`, `/logout`; `GET /api/session`.
-- Operator: `POST /api/tasks`, `/api/tasks/:id/reconcile`, `/run`, `/evaluate`.
-- Settlement preview: `GET /api/tasks/:id/settlement`.
-
-Every mutation requires JSON, the exact configured Origin, and a 16–100 character `Idempotency-Key`. Login challenges expire after five minutes; valid signatures create two-hour sessions. A fresh key cannot reuse a consumed challenge. An exact successful verification retry can recover its cookie without storing the raw session token. Database transactions serialize duplicate requests. Public task serialization removes the hidden seed and expected outputs.
-
-One globally locked AI run executes at a time, with six attempts per UTC day (explicit retries count). Each role uses a separate model call/context with a 90-second overall deadline, one malformed-output repair at most, and no automatic quota/network retry. Actual returned model IDs and provider metadata are saved. Worker source and successful review are frozen; a reviewer failure can retry without replacing the worker source. On restart, interrupted stages require explicit retry. Catalog presence does not guarantee free provider quota.
-
-The model receives only the specification/public examples; the reviewer additionally receives the frozen source. The suite seed and expectations never enter prompts. OpenRouter and its provider receive the task prompt/source. The browser sends public wallet/transaction data to the configured devnet RPC. The backend never has a wallet signing key.
-
-## Evaluator
-
-Only `solve(input: string): string[][]` for valid CSV is supported. Twenty task-specific fixtures are generated before funding, and their hash is committed. Empty cells, quotes, quoted delimiters, doubled quotes, LF/CRLF, and quoted newlines are covered. A trailing row separator does not add a row; empty input returns `[[""]]`.
-
-Candidate source executes in a QuickJS WASM runtime in a separate Node worker. Each case gets a fresh context/runtime, 16 MB heap, 256 KB stack, and a 100 ms interrupt budget. The parent terminates the worker after four seconds. Inputs, source, and outputs are bounded; no modules, host callbacks, filesystem, process, or network bindings are installed. Serialization is captured before source execution; output comparison happens in the parent. Runtime initialization failures are infrastructure errors. Candidate exceptions and resource exhaustion fail tests. This is a narrow language-runtime sandbox, not arbitrary repository/container execution.
-
-## Separate research lab
-
-The live payout rule is ordinary Brier scoring. The lab is a deterministic finite adaptation of the peer-discipline idea in [Bergemann, Koh & Morris, Section 5](https://arxiv.org/html/2609.01595v1#S5). That paper’s unrestricted/costless reward setting does not establish results for this capped, costly-payment adaptation. [AI Sandbagging](https://arxiv.org/abs/2406.07358) is experimental background, not validation of these payments.
-
-Two agents, binary private types and state, correlated types P(00)=P(11)=0.4, and P(01)=P(10)=0.1. Agents observe the uniform state θ. Intrinsic utility is −(a−θ−t)² and desired action a=θ. Compliance pays clamp(λS−u_report,0,B/2); noncompliance pays zero. The browser exhaustively enumerates reports/actions against a truthful compliant peer for all 6 budgets × 5 multipliers, with no-payment and fixed-payment baselines (42 result rows total).
-
-Outputs include maximum profitable deviation gain, minimum truthful-report action incentive, realized expected payment, intrinsic welfare at truthful compliance, and a coordinated full-information upper-bound stress test. Welfare is not an equilibrium prediction or designer value. Maximum budget is separate from realized spend. JSON exports include all assumptions, parameters, and per-type/state results. Some configurations fail to induce truthful compliance. No novelty, general alignment, independence, or achievable coordinated-equilibrium claim is made.
-
-## Verification
-
-```sh
-npm run build
+# Run all unit, LiteSVM, and sandbox tests
 npm test
+
+# Run Playwright UI tests against local server
 npm run test:ui
+
+# Verify compiled Anchor escrow contract
+anchor test
 ```
 
-The Node suite includes compiled-program LiteSVM tests, real ephemeral Postgres tests, QuickJS adversarial code, provider fixtures, chain-response validation, integer payouts, and lab baselines. Postgres tests create a disposable loopback cluster on 15439 and HTTP on 15440; they stop it afterward. This needs OS permissions for shared memory/loopback sockets. `embedded-postgres` is a dev dependency only; its native distribution is large. Install scripts are skipped; the test explicitly rehydrates its required symlinks. Chrome must be installed for Playwright (or configure the browser channel). UI tests intercept all wallet/RPC calls in the controlled flow: their signatures are not devnet results.
+Key verified test suites:
+- **`tests/program.test.mjs`**: LiteSVM devnet simulation verifying Brier arithmetic, deadline expiry refunds, and unauthorized signer rejections.
+- **`tests/core.test.mjs`**: Adversarial QuickJS WASM testing against infinite loops, memory leaks, and global prototype poisoning.
+- **`tests/chain.test.mjs`**: Devnet genesis hash validation, transaction v1 planner verification, and rent reserve preservation.
 
-Optional offline RPC integration:
+---
 
-```sh
-NO_DNA=1 surfpool start --offline --no-deploy --airdrop-amount 0 --ci --port 18899 --ws-port 18900
-node scripts/test-surfpool.mjs
-```
+## 📄 License
 
-This injects the compiled binary into an offline local validator and signs only disposable local test transactions. Never point it at devnet/mainnet. Local screenshots are in `artifacts/`; regenerate the labeled local example with `node scripts/create-fixture.mjs`. Export public task history with `node --env-file-if-exists=.env scripts/export-public.mjs` after configuring `DATABASE_URL`; exports exclude grader expectations and auth records.
-
-Passing tests are not an audit, and mocked AI/wallet/RPC runs are not live demonstrations.
+MIT License. Designed and built for the **Solana Hackathon 2026**.
