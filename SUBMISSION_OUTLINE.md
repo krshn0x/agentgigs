@@ -28,8 +28,8 @@ This is an outline for the team to complete in its own words. It contains no cla
 
 ## Evidence still to add
 
-- [ ] Public app URL.
-- [ ] Source repository and commit.
+- [x] Public app URL: https://orbit-tasks-wcsa.onrender.com (fixture and lab available; live task setup pending).
+- [x] Source repository: https://github.com/krshn0x/orbit-tasks (private); deployed code commit `c6b7dcb`. Decide how judges will access source before submission.
 - [ ] Confirmed devnet deployment and three task transaction links.
 - [ ] Actual worker/reviewer model identifiers and observed evaluation result.
 - [ ] Exact payout amounts from the live task.

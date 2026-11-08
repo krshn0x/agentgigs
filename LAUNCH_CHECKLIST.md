@@ -7,7 +7,8 @@
 - Local application, escrow source, evaluator, and finite research lab are implemented.
 - Exponent-inspired frontend production build passes. All three browser checks pass after the visual update: public fixture/lab, mobile overflow and access checks, and controlled wallet/RPC flow.
 - The public example is handwritten and locally evaluated. It has no AI request or onchain payment.
-- Live model calls, devnet deployment/settlement, and public HTTPS hosting remain unverified.
+- Public HTTPS hosting and database connectivity are verified at https://orbit-tasks-wcsa.onrender.com. Hosted public desktop/mobile checks passed; see `DEPLOYMENT.md`.
+- Live model calls and devnet deployment/settlement remain unverified.
 
 ## Configure locally
 
