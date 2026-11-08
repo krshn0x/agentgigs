@@ -1,7 +1,7 @@
 import {getTaskDecoder,getTaskSize} from '../clients/task-escrow/src/generated/accounts/task.ts';
 import {getAddressEncoder,getProgramDerivedAddress,getU64Encoder,getBase58Encoder,isAddress} from '@solana/kit';
 import {hash,invariant,AppError} from './domain.mjs';
-const DEVNET_GENESIS='EtWTRABZaYq6iMfeYKouRu166VU2xqa1';
+const DEVNET_GENESIS='EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG';
 const hex = bytes=>Buffer.from(bytes).toString('hex');
 export class Chain {
   constructor(config,fetcher=fetch){this.config=config;this.fetcher=fetcher;}

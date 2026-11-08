@@ -5,7 +5,7 @@ import {Chain} from '../src/chain.mjs';import {hash} from '../src/domain.mjs';
 test('chain validates devnet, program owner/size/discriminator/terms and funding',async()=>{
   const wallets=await Promise.all(Array.from({length:4},()=>generateKeyPairSigner()));
   const config={programId:wallets[3].address,rpcUrl:'https://rpc.fixture.test'},requests=[];
-  let genesis='EtWTRABZaYq6iMfeYKouRu166VU2xqa1',owner=config.programId,balance=1000500,corrupt=false,short=false,budget=1000000n;
+  let genesis='EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG',owner=config.programId,balance=1000500,corrupt=false,short=false,budget=1000000n;
   const task={creator:wallets[0].address,worker:wallets[1].address,reviewer:wallets[2].address,nonce:'1',budget:'1000000',deadline:1000,suiteHash:'02'.repeat(32),specificationHash:'01'.repeat(32)};
   const encoder=getTaskEncoder();
   const chain=new Chain(config,async(u,o)=>{const {method,params}=JSON.parse(o.body);requests.push({method,params});let result;
@@ -19,7 +19,7 @@ test('chain validates devnet, program owner/size/discriminator/terms and funding
     return new Response(JSON.stringify({jsonrpc:'2.0',id:1,result}));
   });
   task.pda=await chain.address(task.creator,task.nonce);assert.equal((await chain.read(task)).status,0);
-  genesis='mainnet';await assert.rejects(chain.read(task),/DEVNET_REQUIRED/);genesis='EtWTRABZaYq6iMfeYKouRu166VU2xqa1';
+  genesis='mainnet';await assert.rejects(chain.read(task),/DEVNET_REQUIRED/);genesis='EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG';
   owner=wallets[0].address;await assert.rejects(chain.read(task),/OWNER_MISMATCH/);owner=config.programId;
   corrupt=true;await assert.rejects(chain.read(task),/DISCRIMINATOR/);corrupt=false;
   short=true;await assert.rejects(chain.read(task),/SIZE/);short=false;
