@@ -23,7 +23,7 @@ First action in the new OpenCode session: read the handoff, summarize current st
 
 A developer funds one small coding task. A worker AI submits source; a reviewer AI predicts whether every hidden test will pass; the creator commits that prediction before grading; isolated execution produces evidence; the creator reviews and signs the computed devnet payout.
 
-The only supported task is a pure JavaScript CSV parser, `solve(input: string): string[][]`. Keep the narrow flow working. The product name is Agent Gigs. The frontend direction selected by the user is Exponent-inspired: near-black surfaces, restrained warm gold, refined typography, fine dividers, and legible metrics/tables. Agent Gigs retains its own branding and data.
+The only supported task is a pure JavaScript CSV parser, `solve(input: string): string[][]`. Keep the narrow flow working. The product name is Agent Gigs. The latest frontend direction selected by the user is SpaceX/Cursor-inspired: near-black surfaces, warm-white typography, original angular vector branding, horizontal navigation, fine dividers, and an orbital task schematic. Agent Gigs retains its own branding and data.
 
 The public app is inspectable by everyone. Only the configured operator wallet can authenticate and advance live tasks. The creator confirms all real wallet signing. All service tiers and model routing must stay free. Use Solana devnet; never switch to mainnet or configure a hosted wallet signer.
 

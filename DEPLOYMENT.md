@@ -54,3 +54,11 @@ The `OPENROUTER_API_KEY`, three public wallet settings, and deployed `PROGRAM_ID
 An empty `APP_ORIGIN` uses Render's assigned HTTPS origin through `RENDER_EXTERNAL_URL`. An explicit value is needed only to override it, such as for a custom domain. See [Render's default environment variables](https://render.com/docs/environment-variables).
 
 The service is configured with automatic application deploys off. Future source changes need a deliberate deploy of the intended commit. Blueprint configuration updates can still sync resource settings; keep both plans free. Export public task artifacts before the free database expires.
+
+## AgentGigs identity and verified free model release
+
+- Live release: `1083acda886fcab1fd3c6cf55332231f2c786bb4`, Render `dep-dbo81o7f3r2c73ae6c6g` (Deploy succeeded, 50.5 seconds).
+- Custom SVG logo/favicon and SpaceX/Cursor-inspired interface verified on the public HTTPS page.
+- Both runtime model IDs are `nvidia/nemotron-3.5-lightning:free`. An explicit hosted worker/reviewer probe succeeded and generated source passed all 20 independent diagnostic fixtures (reviewer prediction 7800 basis points). No escrow commitment or settlement was created by this probe.
+- Gemma free probe returned HTTP 429 and was not selected. Normal build command restored; diagnostic inference does not run automatically.
+- Post-release readiness is green for database, models, network/program, and wallets. Production builds and all three local browser checks passed.

@@ -50,7 +50,7 @@ Render free web services sleep after idle and lose local files on restart. Free 
 
 Use a small organization: `web/` for React, `src/` for the hosted backend, and `programs/task_escrow/` for the Anchor program. Shared payout definitions and tests must keep JS/Rust semantics consistent.
 
-Visual direction selected by the user: take inspiration from Exponent's current interface—near-black surfaces, generous whitespace, refined typography, fine dividers, restrained warm-gold accents, and legible metrics/tables. Keep Agent Gigs' own identity and use only its real task, payout, and experiment data; do not reuse Exponent branding or marketing figures. This is a visual reference, not a claim about the 2024 hackathon interface.
+Latest visual direction selected by the user: SpaceX and Cursor. AgentGigs uses an original angular vector mark and wordmark, horizontal navigation, near-black surfaces, warm-white typography at a larger scale, fine dividers, restrained square controls, and an original orbital workflow illustration. Maintain legible mobile task, creation, and research screens. Use the real task, payout, and experiment data. The previous Exponent direction is superseded; preserve AgentGigs' original branding.
 
 Four screens:
 1. Dashboard: current network/readiness, task history and completed demo links.
