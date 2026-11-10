@@ -32,7 +32,7 @@ test('real Postgres auth, idempotency, pipeline, quotas and recovery',async t=>{
       const expired=await request('/auth/challenge',{wallet:operator});await store.pool.query("UPDATE challenges SET expires_at=now()-interval '1 second' WHERE id=$1",[expired.body.id]);
       assert.equal((await request('/auth/verify',{id:expired.body.id,signature:sign(null,Buffer.from(expired.body.message),keys.privateKey).toString('base64')})).status,401);
       const ch=await request('/auth/challenge',{wallet:operator});assert.equal((await request('/auth/verify',{id:ch.body.id,signature:Buffer.alloc(64).toString('base64')})).status,401);
-      assert.equal((await request('/auth/challenge',{wallet:config.worker})).status,403);
+      assert.equal((await request('/auth/challenge',{wallet:config.worker})).status,200);
     });
     let task;
     await t.test('concurrent idempotent drafts persist once; keys cannot change input',async()=>{
@@ -62,6 +62,17 @@ test('real Postgres auth, idempotency, pipeline, quotas and recovery',async t=>{
       await store.update(other.id,t=>{t.source=source;t.solutionHash=hash(source);t.stage='reviewer_running';});await store.recover();assert.equal((await store.get(other.id)).stage,'interrupted');
       modelCalls=[];assert.equal((await request(`/tasks/${other.id}/run`,{})).status,202);await Promise.all([...service.jobs]);assert.deepEqual(modelCalls,['reviewer']);assert.equal((await store.get(other.id)).source,source);
       const reloaded=new Store('postgresql://orbit_test:local-test-only@127.0.0.1:15439/postgres');try{assert.ok((await reloaded.get(task.id)).report.allPass);}finally{await reloaded.close();}
+    });
+    await t.test('any wallet can create private custom tasks but cannot mutate another creator task',async()=>{
+      const otherKeys=generateKeyPairSync('ed25519'),wallet=getAddressDecoder().decode(otherKeys.publicKey.export({type:'spki',format:'der'}).subarray(-32));
+      const ch=await request('/auth/challenge',{wallet});assert.equal(ch.status,200);
+      const auth=await request('/auth/verify',{id:ch.body.id,signature:sign(null,Buffer.from(ch.body.message),otherKeys.privateKey).toString('base64')});assert.equal(auth.status,200);assert.equal(auth.body.wallet,wallet);cookie=auth.cookie.split(';')[0];
+      assert.equal((await request(`/tasks/${task.id}/reconcile`,{})).status,403);
+      const custom={title:'Count characters',instructions:'Return the character count of the input string as a number.',examples:[{input:'abc',output:3}],tests:[{input:'SECRET_PRIVATE_TEST',expected:19}]};
+      const created=await request('/tasks',{custom,budget:1000,expiryMinutes:30});assert.equal(created.status,201);assert.equal(created.body.creator,wallet);assert.equal(created.body.testCount,1);assert.equal(created.body.title,custom.title);assert.ok(!JSON.stringify(created.body).includes('SECRET_PRIVATE_TEST'));
+      const stored=await store.get(created.body.id);assert.equal(stored.suiteHash,hash(custom.tests));assert.equal(stored.fixtures[0].input,'SECRET_PRIVATE_TEST');
+      assert.equal((await request('/tasks',{custom:{...custom,tests:[]}})).status,400);
+      await login();assert.equal((await request(`/tasks/${created.body.id}/run`,{})).status,403);
     });
   }finally{if(server)await new Promise(r=>server.close(r));await store?.close();await pg.stop();}
 });

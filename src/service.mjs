@@ -1,18 +1,18 @@
 import {randomUUID,randomBytes} from 'node:crypto';
 import {isAddress} from '@solana/kit';
-import {SPEC,examples,createSuite,hash,publicTask,invariant,AppError} from './domain.mjs';
+import {SPEC,examples,createSuite,hash,publicTask,invariant,AppError,customDefinition} from './domain.mjs';
 import {callModel,checkModels} from './model.mjs';
 import {evaluate} from './evaluator.mjs';
 import {payouts} from '../shared/payout.mjs';
 export class TaskService {
   constructor(store,chain,config,options={}){Object.assign(this,{store,chain,config});this.model=options.model??callModel;this.grader=options.grader??evaluate;this.modelCheck=options.modelCheck??checkModels;this.jobs=new Set();}
-  async draft(input,c){
+  async draft(input,c,creator=this.config.operator){
     const {config}=this;
-    invariant([config.operator,config.worker,config.reviewer,config.programId].every(isAddress),'WALLETS_OR_PROGRAM_NOT_CONFIGURED',503);
-    invariant(new Set([config.operator,config.worker,config.reviewer]).size===3,'RECIPIENTS_MUST_BE_DISTINCT',503);
-    const suite=createSuite();const nonce=BigInt('0x'+randomBytes(8).toString('hex')).toString();
-    const terms={specification:SPEC,examples,policyVersion:1};
-    const task={id:randomUUID(),title:'Repair a CSV parser',...terms,specificationHash:hash(terms),suiteHash:suite.suiteHash,seed:suite.seed,fixtures:suite.fixtures,creator:config.operator,worker:config.worker,reviewer:config.reviewer,nonce,budget:String(input.budget),deadline:Math.floor(Date.now()/1000)+input.expiryMinutes*60,createdAt:new Date().toISOString(),stage:'draft',network:'devnet',signatures:{},kind:'live'};
+    invariant([creator,config.worker,config.reviewer,config.programId].every(isAddress),'WALLETS_OR_PROGRAM_NOT_CONFIGURED',503);
+    invariant(new Set([creator,config.worker,config.reviewer]).size===3,'RECIPIENTS_MUST_BE_DISTINCT',503);
+    const custom=input.custom?customDefinition(input.custom):null;const suite=custom??createSuite();const nonce=BigInt('0x'+randomBytes(8).toString('hex')).toString();
+    const terms={specification:custom?.specification??SPEC,examples:custom?.examples??examples,policyVersion:1,...(custom?{taskType:'custom',outputFormat:'json',testCount:custom.testCount}:{})};
+    const task={id:randomUUID(),title:custom?.title??'Repair a CSV parser',...terms,specificationHash:hash(terms),suiteHash:suite.suiteHash,seed:suite.seed,fixtures:suite.fixtures,creator,worker:config.worker,reviewer:config.reviewer,nonce,budget:String(input.budget),deadline:Math.floor(Date.now()/1000)+input.expiryMinutes*60,createdAt:new Date().toISOString(),stage:'draft',network:'devnet',signatures:{},kind:'live'};
     task.pda=await this.chain.address(task.creator,nonce);
     await this.store.put(task,c);return publicTask(task);
   }
@@ -81,7 +81,7 @@ export class TaskService {
     invariant(task.source&&task.review&&hash(task.source)===state.solutionHash&&task.review.probabilityBps===state.probabilityBps,'COMMITMENT_MISMATCH');
     invariant(hash(task.fixtures)===task.suiteHash,'SUITE_COMMITMENT_MISMATCH');
     task.chain=state;task.commitmentMatches=true;task.stage='evaluating';
-    task.report=await this.grader(task.source,task.fixtures);task.stage='evaluated';
+    task.report=await this.grader(task.source,task.fixtures,{outputFormat:task.outputFormat});task.stage='evaluated';
     task.payout=payouts(task.budget,task.review.probabilityBps,task.report.allPass);
     await this.store.put(task,c);return publicTask(task);
   }

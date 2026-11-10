@@ -17,7 +17,7 @@ export class Chain {
   }
   async address(creator,nonce) {return (await getProgramDerivedAddress({programAddress:this.config.programId,seeds:[new TextEncoder().encode('task'),getAddressEncoder().encode(creator),getU64Encoder().encode(BigInt(nonce))]}))[0];}
   async recipients(){
-    invariant([this.config.operator,this.config.worker,this.config.reviewer].every(isAddress)&&new Set([this.config.operator,this.config.worker,this.config.reviewer]).size===3,'DISTINCT_WALLETS_REQUIRED',503);
+    invariant([this.config.worker,this.config.reviewer].every(isAddress)&&new Set([this.config.worker,this.config.reviewer]).size===2,'DISTINCT_WALLETS_REQUIRED',503);
     const rent=await this.rpc('getMinimumBalanceForRentExemption',[0]);
     const {value}=await this.rpc('getMultipleAccounts',[[this.config.worker,this.config.reviewer],{encoding:'base64',commitment:'confirmed'}]);
     invariant(value?.length===2&&value.every(v=>v&&v.owner==='11111111111111111111111111111111'&&!v.executable&&v.data?.[0]===''&&BigInt(v.lamports)>=BigInt(rent)),'PAYOUT_WALLETS_NEED_RENT_EXEMPT_DEVNET_BALANCE',503);

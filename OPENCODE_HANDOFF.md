@@ -1,5 +1,8 @@
 # OpenCode handoff: Agent Gigs
 
+Current user override (2026-11-10): creators can now post custom coding tasks. The creation form defaults to custom title/instructions, 1–5 public examples, and 1–20 private input/expected-output tests. Implement `solve(input: string)` returning JSON. Keep the legacy CSV template. Any wallet may authenticate with a signed challenge; every task mutation requires that task's creator session. The earlier CSV-only and operator-only requirements below are superseded. Private tests stay server-side, are committed before funding, and never enter model prompts. Fixed payout recipients and the global six-runs-per-day free-model cap remain.
+
+
 ## Start here
 
 Continue the existing project. The implementation and public hosting are already working. Read this file, `AGENTS.md`, `TASK_QUEUE.md`, `DEPLOYMENT.md`, and then `PROJECT_PLAN.md` before changing code. The plan records accepted product decisions; the queue and deployment record describe current progress.

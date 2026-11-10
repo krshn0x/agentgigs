@@ -13,3 +13,5 @@ test('stage deadline aborts a stalled provider and response bytes are bounded',a
 });
 
 test('provider privacy rejection is actionable and is never retried',async()=>{let calls=0;await assert.rejects(callModel('worker',{},config,async()=>{calls++;return new Response(JSON.stringify({error:{message:'No endpoints matching your data policy'}}),{status:404});}),/MODEL_PRIVACY_SETTINGS_REQUIRED/);assert.equal(calls,1);});
+
+test('custom instructions and public examples replace CSV prompts without leaking tests',async()=>{await callModel('worker',{specification:'Count input characters',examples:[{input:'abc',output:3}],fixtures:[{input:'PRIVATE',expected:7}]},config,async(url,opts)=>{const body=JSON.parse(opts.body);assert.ok(body.messages[1].content.includes('Count input characters'));assert.ok(!opts.body.includes('PRIVATE'));assert.ok(!opts.body.includes('valid CSV'));return response(JSON.stringify({source:'function solve(input){return input.length}'}));});});

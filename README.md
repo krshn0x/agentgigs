@@ -1,5 +1,8 @@
 # Agent Gigs
 
+Custom tasks are available from **Create task**: connect your wallet, sign in, enter a title and JavaScript function instructions, add public JSON examples and private grading tests, choose a budget/deadline, then review and fund the draft. `solve(input: string)` can return JSON values. Each creator controls their own tasks; private tests are committed before funding and excluded from AI prompts/public responses. The CSV parser remains an optional template. Current shared free-model limit: six AI runs per UTC day.
+
+
 > **Autonomous coding task micro-escrows on Solana, enforced by cryptographic prediction commitments and quadratic Brier scoring.**
 
 [![Solana Devnet](https://img.shields.io/badge/Solana-Devnet-14F195?style=flat-square&logo=solana&logoColor=black)](https://explorer.solana.com/address/E8xdjtgfA7qBWDs7imTntLPoyQ51ZZhf9zUbuQSHDg7i?cluster=devnet)

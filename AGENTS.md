@@ -1,5 +1,8 @@
 # Agent Gigs
 
+Current user override (2026-11-10): creators can now post custom coding tasks. The creation form defaults to custom title/instructions, 1–5 public examples, and 1–20 private input/expected-output tests. Implement `solve(input: string)` returning JSON. Keep the legacy CSV template. Any wallet may authenticate with a signed challenge; every task mutation requires that task's creator session. The earlier CSV-only and operator-only requirements below are superseded. Private tests stay server-side, are committed before funding, and never enter model prompts. Fixed payout recipients and the global six-runs-per-day free-model cap remain.
+
+
 This repository is the user's Solana x MLH AI-track hackathon project. Implementation, hosting, devnet deployment, and real model diagnostics are complete. A funded task expired after a provider failure; wallet-approved refund and a fresh task lifecycle remain pending. The primary checkout is `/Users/krishna/orbit-tasks`; the user also authorized OpenCode development in the separate `/Users/krishna/orbit-tasks-opencode` worktree on `opencode/work`. Work in the checkout assigned to the current session.
 
 For a resumed or OpenCode session, read `OPENCODE_HANDOFF.md`, `TASK_QUEUE.md`, and `DEPLOYMENT.md` first. The public app is https://orbit-tasks-wcsa.onrender.com. Continue existing work rather than restarting implementation.

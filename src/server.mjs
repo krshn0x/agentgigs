@@ -7,13 +7,13 @@ import {readConfig} from './config.mjs';
 import {Store} from './store.mjs';
 import {Chain} from './chain.mjs';
 import {TaskService} from './service.mjs';
-import {challenge,verifyChallenge,requireOperator,tokenFrom,cookie} from './auth.mjs';
-import {hash,invariant,publicTask,AppError} from './domain.mjs';
+import {challenge,verifyChallenge,requireWalletSession,tokenFrom,cookie} from './auth.mjs';
+import {hash,invariant,publicTask,AppError,customTaskSchema} from './domain.mjs';
 import {checkModels} from './model.mjs';
 import {runLab} from '../shared/lab.mjs';
 
 const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.json':'application/json'};
-const draftSchema=z.object({budget:z.number().int().min(1).max(100_000_000).default(10_000_000),expiryMinutes:z.number().int().min(5).max(1440).default(30)}).strict();
+const draftSchema=z.object({budget:z.number().int().min(1).max(100_000_000).default(10_000_000),expiryMinutes:z.number().int().min(5).max(1440).default(30),custom:customTaskSchema.optional()}).strict();
 async function readBody(req){let body='';for await(const chunk of req){body+=chunk;invariant(Buffer.byteLength(body)<=40000,'REQUEST_TOO_LARGE',413);}try{return JSON.parse(body||'{}');}catch{throw new AppError('INVALID_JSON',400);}}
 export function createApp({config,store,chain,service}){
   let modelStatus,modelCheckedAt=0;
@@ -36,7 +36,7 @@ export function createApp({config,store,chain,service}){
       if(method==='GET'&&path==='/api/config')return send(200,{operator:config.operator,worker:config.worker,reviewer:config.reviewer,programId:config.programId,network:'devnet'});
       if(method==='GET'&&path==='/api/lab')return send(200,runLab());
       if(method==='GET'&&path==='/api/fixture')return send(200,JSON.parse(await readFile(new URL('../fixtures/public-task.json',import.meta.url),'utf8')));
-      if(method==='GET'&&path==='/api/session'){let wallet=null;try{wallet=await requireOperator(req,store,config);}catch{}return send(200,{wallet});}
+      if(method==='GET'&&path==='/api/session'){let wallet=null;try{wallet=await requireWalletSession(req,store,config);}catch{}return send(200,{wallet});}
       if(method==='GET'&&path==='/api/tasks')return send(200,{tasks:(await store.list()).map(publicTask)});
       const match=/^\/api\/tasks\/([0-9a-f-]{36})(?:\/(reconcile|run|evaluate|settlement))?$/.exec(path);
       if(method==='GET'&&match&&!match[2])return send(200,publicTask(await store.get(match[1])));
@@ -49,21 +49,21 @@ export function createApp({config,store,chain,service}){
         const fingerprint=hash({path,body});
         if(path==='/api/auth/challenge'){
           const input=z.object({wallet:z.string().max(44)}).strict().parse(body);
-          invariant(input.wallet===config.operator,'OPERATOR_ONLY',403);
+
           // The database is the cross-process single-use source of truth.
           const out=await store.idempotent(`auth:${key}`,fingerprint,async c=>({body:await challenge(store,input.wallet,config.origin,c),status:200}));return send(out.status,out.body);
         }
         if(path==='/api/auth/verify'){
           const input=z.object({id:z.uuid(),signature:z.string().max(100)}).strict().parse(body);
-          const token=await store.transaction(c=>verifyChallenge(c,input.id,input.signature,config.operator,key));res.setHeader('Set-Cookie',cookie(token,config.origin));return send(200,{wallet:config.operator});
+          const token=await store.transaction(c=>verifyChallenge(c,input.id,input.signature,null,key));res.setHeader('Set-Cookie',cookie(token,config.origin));return send(200,{wallet:(await store.pool.query('SELECT wallet FROM challenges WHERE id=$1',[input.id])).rows[0].wallet});
         }
-        const wallet=await requireOperator(req,store,config);
+        const wallet=await requireWalletSession(req,store,config);
         let lock,launchTask;
         try {
           const out=await store.idempotent(`${wallet}:${key}`,fingerprint,async c=>{
             if(path==='/api/auth/logout'){await c.query('DELETE FROM sessions WHERE token_hash=$1',[hash(tokenFrom(req))]);return {body:{ok:true},status:200};}
-            if(path==='/api/tasks')return {body:await service.draft(draftSchema.parse(body),c),status:201};
-            invariant(match,'ROUTE_NOT_FOUND',404);const [,id,action]=match;
+            if(path==='/api/tasks')return {body:await service.draft(draftSchema.parse(body),c,wallet),status:201};
+            invariant(match,'ROUTE_NOT_FOUND',404);const [,id,action]=match;invariant((await store.get(id,c)).creator===wallet,'TASK_CREATOR_ONLY',403);
             if(action==='reconcile'){const input=z.object({signature:z.string().max(90).optional(),action:z.enum(['create_task','record_review','settle_task','cancel_task','refund_expired']).optional()}).strict().parse(body);return {body:await service.reconcile(id,input.signature,input.action,c),status:200};}
             z.object({}).strict().parse(body);
             if(action==='run'){lock=await store.acquireRunner();launchTask=await service.reserveRun(id,c);return {body:publicTask(launchTask),status:202};}
@@ -81,7 +81,7 @@ export function createApp({config,store,chain,service}){
       let file=resolve(root,'.'+decodeURIComponent(path));invariant(file===root||file.startsWith(root+'/'),'INVALID_PATH',400);
       try{if(!(await stat(file)).isFile())file=resolve(root,'index.html');}catch{file=resolve(root,'index.html');}
       const data=await readFile(file);res.writeHead(200,{'Content-Type':types[extname(file)]??'application/octet-stream','Cache-Control':extname(file)==='.html'?'no-cache':'public, max-age=3600'});res.end(method==='HEAD'?undefined:data);
-    }catch(error){const known=error instanceof AppError;const validation=error instanceof z.ZodError;const status=known?error.status:validation?400:503;send(status,{error:known?error.code:validation?'INVALID_INPUT':'SERVICE_UNAVAILABLE'});if(!known&&!validation)console.error(JSON.stringify({event:'request_error',code:'SERVICE_UNAVAILABLE'}));}
+    }catch(error){const known=error instanceof AppError;const validation=error instanceof z.ZodError;const status=known?error.status:validation?400:503;send(status,{error:known?error.code:validation?'INVALID_INPUT':'SERVICE_UNAVAILABLE',...(validation?{details:error.issues.slice(0,5).map(i=>`${i.path.join('.')}: ${i.message}`)}:{})});if(!known&&!validation)console.error(JSON.stringify({event:'request_error',code:'SERVICE_UNAVAILABLE'}));}
   });
 }
 export async function start(){

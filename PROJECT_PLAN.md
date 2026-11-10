@@ -1,5 +1,8 @@
 # Agent Gigs: complete implementation handoff
 
+Current user override (2026-11-10): creators can now post custom coding tasks. The creation form defaults to custom title/instructions, 1–5 public examples, and 1–20 private input/expected-output tests. Implement `solve(input: string)` returning JSON. Keep the legacy CSV template. Any wallet may authenticate with a signed challenge; every task mutation requires that task's creator session. The earlier CSV-only and operator-only requirements below are superseded. Private tests stay server-side, are committed before funding, and never enter model prompts. Fixed payout recipients and the global six-runs-per-day free-model cap remain.
+
+
 ## User request and accepted decisions
 
 Build a working Solana x MLH AI-track hackathon product. The user explicitly changed the original plan from extending `solana-platform` to **a new git repository and a new Codex context**. This repository was initialized on `main` for that purpose. Agent Gigs is implemented and deployed; hosted readiness and the devnet program are green. A real AI task and its creator-approved escrow lifecycle remain to be demonstrated. See `OPENCODE_HANDOFF.md`, `TASK_QUEUE.md`, and `DEPLOYMENT.md` for current status. The sections below preserve the accepted design and implementation requirements.

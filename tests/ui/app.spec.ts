@@ -16,7 +16,7 @@ test('controlled wallet/API/RPC fixture exercises funding, commitment, evaluatio
   const [creator,worker,reviewer,program,pda]=await Promise.all(Array.from({length:5},()=>generateKeyPairSigner()));
   const fixture=JSON.parse(await readFile('fixtures/public-task.json','utf8'));
   let task:any={...fixture,id:'01234567-1234-4234-8234-123456789abc',kind:'live',stage:'draft',creator:creator.address,worker:worker.address,reviewer:reviewer.address,pda:pda.address,nonce:'1',deadline:Math.floor(Date.now()/1000)+1800,source:undefined,solutionHash:undefined,workerMetadata:undefined,review:undefined,report:undefined,payout:undefined};let session=false;
-  const cfg={operator:creator.address,worker:worker.address,reviewer:reviewer.address,programId:program.address,network:'devnet'};
+  const cfg={operator:program.address,worker:worker.address,reviewer:reviewer.address,programId:program.address,network:'devnet'};
   await page.addInitScript(({address,publicKey})=>{
     const account={address,publicKey:new Uint8Array(publicKey),chains:['solana:devnet'],features:['solana:signMessage','solana:signTransaction']};
     const wallet={version:'1.0.0',name:'Orbit Test Wallet',icon:'data:image/svg+xml;base64,PHN2Zy8+',chains:['solana:devnet'],accounts:[account],features:{'standard:connect':{version:'1.0.0',connect:async()=>({accounts:[account]})},'standard:disconnect':{version:'1.0.0',disconnect:async()=>{}},'standard:events':{version:'1.0.0',on:()=>()=>{}},'solana:signMessage':{version:'1.0.0',signMessage:async(...inputs:any[])=>inputs.map(i=>({signedMessage:i.message,signature:new Uint8Array(64).fill(2)}))},'solana:signTransaction':{version:'1.0.0',supportedTransactionVersions:[0],signTransaction:async(...inputs:any[])=>inputs.map(i=>{const signed=new Uint8Array(i.transaction);signed.fill(2,1,65);return {signedTransaction:signed};})}}};
@@ -26,7 +26,7 @@ test('controlled wallet/API/RPC fixture exercises funding, commitment, evaluatio
     const path=new URL(route.request().url()).pathname;let body:any={};const input=route.request().postDataJSON();
     if(path==='/api/config')body=cfg;else if(path==='/api/session')body={wallet:session?creator.address:null};else if(path==='/api/readiness')body={available:true,database:{available:true},models:{available:true},network:{available:true},wallets:{available:true}};
     else if(path==='/api/tasks'&&route.request().method()==='GET')body={tasks:[]};else if(path==='/api/auth/challenge')body={id:'fixture-challenge',message:'Orbit controlled test login'};else if(path==='/api/auth/verify'){session=true;body={wallet:creator.address};}
-    else if(path==='/api/tasks'){body=task;}
+    else if(path==='/api/tasks'){expect(input.custom.title).toBe('Reverse a string');expect(input.custom.tests).toHaveLength(3);body=task;}
     else if(path.endsWith('/reconcile')){if(input?.action==='create_task'){task={...task,stage:'funded',chain:{status:0,reviewCommitted:false}};}if(input?.action==='record_review'){task={...task,stage:'committed',chain:{status:0,reviewCommitted:true}};}if(input?.action==='settle_task'){task={...task,stage:'settled',chain:{status:1,reviewCommitted:true}};}body=task;}
     else if(path.endsWith('/run')){task={...task,stage:'review_ready',source:fixture.source,solutionHash:fixture.solutionHash,workerMetadata:{returnedModel:'TEST FIXTURE'},review:fixture.review};body=task;}
     else if(path.endsWith('/evaluate')){task={...task,stage:'evaluated',report:fixture.report,payout:fixture.payout};body=task;}
