@@ -62,3 +62,10 @@ The service is configured with automatic application deploys off. Future source 
 - Both runtime model IDs are `nvidia/nemotron-3.5-lightning:free`. An explicit hosted worker/reviewer probe succeeded and generated source passed all 20 independent diagnostic fixtures (reviewer prediction 7800 basis points). No escrow commitment or settlement was created by this probe.
 - Gemma free probe returned HTTP 429 and was not selected. Normal build command restored; diagnostic inference does not run automatically.
 - Post-release readiness is green for database, models, network/program, and wallets. Production builds and all three local browser checks passed.
+
+## Product workspace refinement — 2026-11-10
+
+- Published commit `a74ddf55fc3f7525190c80c82c2fe2bafc699161` through Render deploy `dep-dbphdkmgekts739veimg`; Render reported Deploy succeeded / Live in 46.9 seconds.
+- Verified the published creation page in Safari: structured public/private test editors, step headings, reward summary, and creator wallet controls.
+- Build passed. All four browser checks passed; the wallet and workspace checks also passed after final keyboard-focus refinements.
+- The Render service display name is now `agentgigs`, but its existing public hostname remains `orbit-tasks-wcsa.onrender.com`. Renaming the service did not change this hostname.
