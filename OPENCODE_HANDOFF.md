@@ -101,3 +101,7 @@ Commit changes on `opencode/work` and report the commit IDs. Bring reviewed chan
 ## Latest user direction
 
 AgentGigs now uses a SpaceX/Cursor-inspired monochrome design with original vector branding. `web/Brand.tsx`, `web/brand.css`, and `web/public/agentgigs-*.svg` own the new visual layer. Both model roles use `nvidia/nemotron-3.5-lightning:free`: an explicit hosted probe returned valid schemas and 20/20 evaluator cases. This is diagnostic evidence, not an escrow settlement. See the latest queue notes before resuming.
+
+## Product UI refinement
+
+The overview now has searchable task activity with All/Active/Completed/My tasks filters and refresh. Custom task examples/private tests use structured add/remove row editors rather than raw JSON arrays. Each expected result is still JSON and validated before submission. The design has a compact hero, consistent muted-green surfaces, clearer status/budget hierarchy, a sticky reward summary on desktop, and responsive layouts. Keyboard navigation includes a skip link, current-page semantics, and wallet-dialog focus containment. Four browser checks cover public/fixture/lab, mobile, wallet preview expiry/refresh, and task filtering/editor controls.
